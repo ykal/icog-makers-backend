@@ -38,5 +38,9 @@
   "Icog-Role": {
     "dataSource": "mainDS",
     "public": true
+  },
+  "UserAccount": {
+    "dataSource": "mainDS",
+    "public": true
   }
 }
