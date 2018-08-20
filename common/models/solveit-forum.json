@@ -1,0 +1,28 @@
+{
+  "name": "SolveIT-Forum",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "slung": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "discussions": {
+      "type": "hasMany",
+      "model": "SolveIT-Discussion",
+      "foreignKey": "forumId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

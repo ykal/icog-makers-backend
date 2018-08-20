@@ -1,0 +1,42 @@
+{
+  "name": "SolveIT-Discussion",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "slung": {
+      "type": "string",
+      "required": true
+    },
+    "created": {
+      "type": "string",
+      "required": true,
+      "default": "now"
+    },
+    "content": {
+      "type": "string",
+      "required": true
+    },
+    "favorites": {
+      "type": [
+        "string"
+      ]
+    },
+    "pinned": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "validations": [],
+  "relations": {
+    "comments": {
+      "type": "hasMany",
+      "model": "SolveIT-Discussion-Comment",
+      "foriegnKey": "discussionId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

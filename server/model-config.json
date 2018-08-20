@@ -42,5 +42,29 @@
   "UserAccount": {
     "dataSource": "mainDS",
     "public": true
+  },
+  "SolveIT-Forum": {
+    "dataSource": "mainDS",
+    "public": true
+  },
+  "SolveIT-Discussion": {
+    "dataSource": "mainDS",
+    "public": true
+  },
+  "SolveIT-Discussion-Comment": {
+    "dataSource": "mainDS",
+    "public": true
+  },
+  "resource": {
+    "dataSource": "mainDS",
+    "public": true
+  },
+  "event": {
+    "dataSource": "mainDS",
+    "public": true
+  },
+  "storage": {
+    "dataSource": "storage",
+    "public": true
   }
 }

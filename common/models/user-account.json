@@ -37,6 +37,21 @@
       "type": "belongsTo",
       "model": "IcogRole",
       "foreignKey": "roleId"
+    },
+    "solveIT-forums": {
+      "type": "hasMany",
+      "model": "SolveIT-Forum",
+      "foriegnKey": "userId"
+    },
+    "solveIT-discussions": {
+      "type": "hasMany",
+      "model": "SolveIT-Discussion",
+      "foriegnKey": "userId"
+    },
+    "solveIT-discussion-comments": {
+      "type": "hasMany",
+      "model": "SolveIt-Discussion-Comment",
+      "foriegnKey": "userId"
     }
   },
   "acls": [
