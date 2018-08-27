@@ -1,0 +1,24 @@
+{
+  "name": "favourite-discussion",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {},
+  "validations": [],
+  "relations": {
+    "discussion": {
+      "type": "belongsTo",
+      "model": "SolveIT-Discussion",
+      "foreignKey": "discussionId"
+    },
+    "user": {
+      "type": "belongsTo",
+      "model": "UserAccount",
+      "foreignKey": "userId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

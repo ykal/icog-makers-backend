@@ -1,0 +1,24 @@
+{
+  "name": "forum-member",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {},
+  "validations": [],
+  "relations": {
+    "forum": {
+      "type": "belongsTo",
+      "model": "SolveIT-Forum",
+      "foreignKey": "forumId"
+    },
+    "user": {
+      "type": "belongsTo",
+      "model": "UserAccount",
+      "foreignKey": "userId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

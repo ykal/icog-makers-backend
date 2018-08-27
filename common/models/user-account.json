@@ -52,6 +52,24 @@
       "type": "hasMany",
       "model": "SolveIt-Discussion-Comment",
       "foriegnKey": "userId"
+    },
+    "forums": {
+      "type": "hasMany",
+      "model": "SolveIT-Forum",
+      "foreignKey": "userId",
+      "through": "forum-member"
+    },
+    "favouriteDiscussions": {
+      "type": "hasMany",
+      "model": "SolveIT-Discussion",
+      "foreignKey": "userId",
+      "through": "favourite-discussion"
+    },
+    "projects": {
+      "type": "hasMany",
+      "model": "solveit-project",
+      "foreignKey": "userId",
+      "through": "project-member"
     }
   },
   "acls": [

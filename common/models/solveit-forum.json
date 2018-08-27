@@ -13,6 +13,11 @@
     "slung": {
       "type": "string",
       "required": true
+    },
+    "private": {
+      "type": "boolean",
+      "required": true,
+      "default": false
     }
   },
   "validations": [],
@@ -21,6 +26,16 @@
       "type": "hasMany",
       "model": "SolveIT-Discussion",
       "foreignKey": "forumId"
+    },
+    "category": {
+      "type": "belongsTo",
+      "model": "forum-category"
+    },
+    "members": {
+      "type": "hasMany",
+      "model": "UserAccount",
+      "foreignKey": "forumId",
+      "through": "forum-member"
     }
   },
   "acls": [],

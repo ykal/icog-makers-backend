@@ -10,19 +10,14 @@
       "type": "string",
       "required": true
     },
-    "created": {
-      "type": "string",
+    "createdAt": {
+      "type": "date",
       "required": true,
       "default": "now"
     },
     "content": {
       "type": "string",
       "required": true
-    },
-    "favorites": {
-      "type": [
-        "string"
-      ]
     },
     "pinned": {
       "type": "boolean",
@@ -35,6 +30,12 @@
       "type": "hasMany",
       "model": "SolveIT-Discussion-Comment",
       "foriegnKey": "discussionId"
+    },
+    "favouriteUsers": {
+      "type": "hasMany",
+      "model": "UserAccount",
+      "foreignKey": "discussionId",
+      "through": "favourite-discussion"
     }
   },
   "acls": [],
