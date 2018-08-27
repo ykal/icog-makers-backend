@@ -35,7 +35,7 @@
   "relations": {
     "role": {
       "type": "belongsTo",
-      "model": "IcogRole",
+      "model": "Icog-Role",
       "foreignKey": "roleId"
     },
     "solveIT-forums": {
