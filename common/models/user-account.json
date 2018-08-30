@@ -29,6 +29,26 @@
       "type": "string",
       "required": true,
       "default": "INACTIVE"
+    },
+    "sex": {
+      "type": "string",
+      "required": "true"
+    },
+    "age": {
+      "type": "number",
+      "required": "true"
+    },
+    "educationLevel": {
+      "type": "string",
+      "required": "true"
+    },
+    "workStatus": {
+      "type": "string",
+      "required": "true"
+    },
+    "address": {
+      "type": "object",
+      "required": "true"
     }
   },
   "validations": [],
