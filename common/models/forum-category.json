@@ -1,17 +1,13 @@
 {
-  "name": "SolveIT-Discussion-Comment",
+  "name": "forum-category",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true
   },
   "properties": {
-    "content": {
+    "category": {
       "type": "string",
-      "required": true
-    },
-    "createdAt": {
-      "type": "date",
       "required": true
     }
   },

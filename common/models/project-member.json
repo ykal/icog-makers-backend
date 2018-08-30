@@ -1,0 +1,24 @@
+{
+  "name": "project-member",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {},
+  "validations": [],
+  "relations": {
+    "project": {
+      "type": "belongsTo",
+      "model": "solveit-project",
+      "foreignKey": "projectId"
+    },
+    "user": {
+      "type": "belongsTo",
+      "model": "UserAccount",
+      "foreignKey": "userId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

@@ -1,22 +1,25 @@
 {
-  "name": "SolveIT-Discussion-Comment",
+  "name": "solveit-project",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true
   },
   "properties": {
-    "content": {
+    "title": {
       "type": "string",
-      "required": true
-    },
-    "createdAt": {
-      "type": "date",
       "required": true
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "members": {
+      "type": "hasMany",
+      "model": "UserAccount",
+      "foreignKey": "projectId",
+      "through": "project-member"
+    }
+  },
   "acls": [],
   "methods": {}
 }

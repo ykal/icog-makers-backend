@@ -3,16 +3,6 @@
     "name": "db",
     "connector": "memory"
   },
-  "mainDS": {
-    "host": "",
-    "port": 27017,
-    "url": "",
-    "database": "icog",
-    "password": "",
-    "name": "mainDS",
-    "user": "",
-    "connector": "mongodb"
-  },
   "storage": {
     "name": "storage",
     "connector": "loopback-component-storage",

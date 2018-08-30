@@ -36,35 +36,55 @@
     "public": false
   },
   "Icog-Role": {
-    "dataSource": "mainDS",
+    "dataSource": "db",
     "public": true
   },
   "UserAccount": {
-    "dataSource": "mainDS",
+    "dataSource": "db",
     "public": true
   },
   "SolveIT-Forum": {
-    "dataSource": "mainDS",
+    "dataSource": "db",
     "public": true
   },
   "SolveIT-Discussion": {
-    "dataSource": "mainDS",
+    "dataSource": "db",
     "public": true
   },
   "SolveIT-Discussion-Comment": {
-    "dataSource": "mainDS",
+    "dataSource": "db",
     "public": true
   },
   "resource": {
-    "dataSource": "mainDS",
+    "dataSource": "db",
     "public": true
   },
   "event": {
-    "dataSource": "mainDS",
+    "dataSource": "db",
     "public": true
   },
   "storage": {
     "dataSource": "storage",
+    "public": true
+  },
+  "forum-category": {
+    "dataSource": "db",
+    "public": true
+  },
+  "forum-member": {
+    "dataSource": "db",
+    "public": true
+  },
+  "favourite-discussion": {
+    "dataSource": "db",
+    "public": true
+  },
+  "solveit-project": {
+    "dataSource": "db",
+    "public": true
+  },
+  "project-member": {
+    "dataSource": "db",
     "public": true
   }
 }
