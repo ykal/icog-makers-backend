@@ -1,5 +1,5 @@
 {
-  "name": "SolveIT-Forum",
+  "name": "SolveITForum",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
@@ -18,6 +18,11 @@
       "type": "boolean",
       "required": true,
       "default": false
+    },
+    "discussionCount": {
+      "type": "number",
+      "required": true,
+      "default": 0
     }
   },
   "validations": [],
@@ -29,7 +34,7 @@
     },
     "category": {
       "type": "belongsTo",
-      "model": "forum-category"
+      "model": "forumCategory"
     },
     "members": {
       "type": "hasMany",
