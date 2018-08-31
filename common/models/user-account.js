@@ -29,7 +29,7 @@ module.exports = function(Useraccount) {
   // register SolveIT teams
   Useraccount.registerSolveItTeam = async (firstName, middleName, lastName, email, password, phoneNumber) => {
     let { IcogRole } = Useraccount.app.models;
-    let userRole = await userRole.findOne({ where : { name: "solve-it-team" } });
+    let userRole = await IcogRole.findOne({ where : { name: "solve-it-team" } });
 
     let user = {
       "firstName": firstName,
@@ -48,20 +48,12 @@ module.exports = function(Useraccount) {
   }
 
   // register SolveIT participants
-  Useraccount.registerParticipants = async (firstName, middleName, lastName, email, password, phoneNumber) => {
+  Useraccount.registerParticipants = async (user) => {
     let { IcogRole } = Useraccount.app.models;
-    let userRole = await userRole.findOne({ where : { name: "solve-it-participants" } });
+    let userRole = await IcogRole.findOne({ where : { name: "solve-it-participants" } });
 
-    let user = {
-      "firstName": firstName,
-      "middleName": middleName,
-      "lastName": lastName,
-      "phoneNumber": phoneNumber,
-      "password": password,
-      "email": email,
-      "roleId": userRole.id,
-      "created": new Date().toISOString()
-    };
+    user["roleId"] = userRole.id;
+    user["created"] = new Date().toISOString();
 
     user = await Useraccount.create(user);
 
@@ -126,12 +118,7 @@ module.exports = function(Useraccount) {
   Useraccount.remoteMethod("registerParticipants", {
     desctiption: "Register SolveIT teams.",
     accepts: [
-      {arg: "firstName", type: "string", required: true},
-      {arg: "middleName", type: "string", required: true},
-      {arg: "lastName", type: "string", required: true},
-      {arg: "email", type: "string", required: true},
-      {arg: "password", type: "string", required: true},
-      {arg: "phoneNumber", type: "string", required: true}
+      {arg: "user", type: "object", required: true}
     ],
     http: {
       verb: "post",

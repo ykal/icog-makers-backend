@@ -8,19 +8,23 @@
   "properties": {
     "firstName": {
       "type": "string",
-      "required": true
+      "required": true,
+      "default": "None"
     },
     "middleName": {
       "type": "string",
-      "required": true
+      "required": true,
+      "default": "None"
     },
     "lastName": {
       "type": "string",
-      "required": true
+      "required": true,
+      "default": "None"
     },
     "phoneNumber": {
       "type": "string",
-      "required": true
+      "required": true,
+      "default": "None"
     },
     "rememberMe": {
       "type": "boolean"
@@ -29,6 +33,31 @@
       "type": "string",
       "required": true,
       "default": "INACTIVE"
+    },
+    "sex": {
+      "type": "string",
+      "required": "true",
+      "default": "None"
+    },
+    "age": {
+      "type": "number",
+      "required": "true",
+      "default": "None"
+    },
+    "educationLevel": {
+      "type": "string",
+      "required": "true",
+      "default": "None"
+    },
+    "workStatus": {
+      "type": "string",
+      "required": "true",
+      "default": "None"
+    },
+    "address": {
+      "type": "object",
+      "required": "true",
+      "default": "None"
     }
   },
   "validations": [],
