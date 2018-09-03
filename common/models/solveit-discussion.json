@@ -13,7 +13,7 @@
     "createdAt": {
       "type": "date",
       "required": true,
-      "default": "now"
+      "defaultFn": "now"
     },
     "content": {
       "type": "string",

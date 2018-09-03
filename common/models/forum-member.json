@@ -10,7 +10,7 @@
   "relations": {
     "forum": {
       "type": "belongsTo",
-      "model": "SolveIT-Forum",
+      "model": "SolveITForum",
       "foreignKey": "forumId"
     },
     "user": {

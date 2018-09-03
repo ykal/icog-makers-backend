@@ -69,7 +69,7 @@
     },
     "solveIT-forums": {
       "type": "hasMany",
-      "model": "SolveIT-Forum",
+      "model": "SolveITForum",
       "foriegnKey": "userId"
     },
     "solveIT-discussions": {
@@ -84,7 +84,7 @@
     },
     "forums": {
       "type": "hasMany",
-      "model": "SolveIT-Forum",
+      "model": "SolveITForum",
       "foreignKey": "userId",
       "through": "forum-member"
     },

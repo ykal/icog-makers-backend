@@ -43,7 +43,7 @@
     "dataSource": "db",
     "public": true
   },
-  "SolveIT-Forum": {
+  "SolveITForum": {
     "dataSource": "db",
     "public": true
   },
@@ -67,7 +67,7 @@
     "dataSource": "storage",
     "public": true
   },
-  "forum-category": {
+  "forumCategory": {
     "dataSource": "db",
     "public": true
   },
