@@ -71,7 +71,7 @@
     "dataSource": "db",
     "public": true
   },
-  "forum-member": {
+  "forum_member": {
     "dataSource": "db",
     "public": true
   },

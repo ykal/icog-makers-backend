@@ -13,6 +13,10 @@
     "description": {
     	"type": "string",
     	"required": true
+    },
+    "showcased": {
+      "type": "boolean",
+      "default": false
     }
   },
   "validations": [],

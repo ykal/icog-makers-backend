@@ -1,5 +1,5 @@
 {
-  "name": "forum-member",
+  "name": "forum_member",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
@@ -8,12 +8,12 @@
   "properties": {},
   "validations": [],
   "relations": {
-    "forum": {
+    "solveITForum": {
       "type": "belongsTo",
       "model": "SolveITForum",
       "foreignKey": "forumId"
     },
-    "user": {
+    "userAccount": {
       "type": "belongsTo",
       "model": "UserAccount",
       "foreignKey": "userId"
