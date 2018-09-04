@@ -86,5 +86,9 @@
   "project-member": {
     "dataSource": "db",
     "public": true
+  },
+  "solvieITCompetition": {
+    "dataSource": "db",
+    "public": true
   }
 }
