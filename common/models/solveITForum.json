@@ -40,7 +40,7 @@
       "type": "hasMany",
       "model": "UserAccount",
       "foreignKey": "forumId",
-      "through": "forum-member"
+      "through": "forum_member"
     }
   },
   "acls": [],

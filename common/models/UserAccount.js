@@ -75,6 +75,36 @@ module.exports = function(Useraccount) {
     return user;
   }
 
+  Useraccount.searchUser = function(keyword, cb) {
+    Useraccount.find({where: {email: {like: keyword}}}, function(err, users){
+      cb(null, users);
+    });
+  }
+
+  Useraccount.getUserListByRole = function(roleId, cb) {
+    Useraccount.find({where: {roleId: roleId}}, function(err, users){
+      cb(null, users);
+    });
+  }
+
+  Useraccount.remoteMethod(
+    'searchUser',
+    {
+      http: {path: '/search/:keyword', verb: 'get'},
+      accepts:{arg: 'keyword', type: 'string'},
+      returns: {arg: 'Result', type: 'Object'}
+    }
+  );
+
+  Useraccount.remoteMethod(
+    'getUserListByRole',
+    {
+      http: {path: '/role/:roleId/users', verb: 'get'},
+      accepts:{arg: 'roleId', type: 'string'},
+      returns: {arg: 'Result', type: 'Object'}
+    }
+  );
+
   Useraccount.remoteMethod("registerSolveItMgt", {
     desctiption: "Register SolveIT managment users",
     accepts: [

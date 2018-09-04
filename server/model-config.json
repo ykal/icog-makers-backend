@@ -71,7 +71,7 @@
     "dataSource": "mongo",
     "public": true
   },
-  "forum-member": {
+  "forum_member": {
     "dataSource": "mongo",
     "public": true
   },

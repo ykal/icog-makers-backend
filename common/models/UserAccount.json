@@ -67,11 +67,6 @@
       "model": "Icog-Role",
       "foreignKey": "roleId"
     },
-    "solveIT-forums": {
-      "type": "hasMany",
-      "model": "SolveITForum",
-      "foriegnKey": "userId"
-    },
     "solveIT-discussions": {
       "type": "hasMany",
       "model": "SolveIT-Discussion",
@@ -86,7 +81,7 @@
       "type": "hasMany",
       "model": "SolveITForum",
       "foreignKey": "userId",
-      "through": "forum-member"
+      "through": "forum_member"
     },
     "favouriteDiscussions": {
       "type": "hasMany",

@@ -17,6 +17,10 @@
     "proposal": {
       "type": "object",
       "required": true
+    },
+    "showcased": {
+      "type": "boolean",
+      "default": false
     }
   },
   "validations": [],
