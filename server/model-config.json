@@ -14,53 +14,53 @@
     ]
   },
   "User": {
-    "dataSource": "db"
+    "dataSource": "mongo"
   },
   "AccessToken": {
-    "dataSource": "db",
+    "dataSource": "mongo",
     "public": false
   },
   "ACL": {
-    "dataSource": "db",
+    "dataSource": "mongo",
     "public": false
   },
   "RoleMapping": {
-    "dataSource": "db",
+    "dataSource": "mongo",
     "public": false,
     "options": {
       "strictObjectIDCoercion": true
     }
   },
   "Role": {
-    "dataSource": "db",
+    "dataSource": "mongo",
     "public": false
   },
   "Icog-Role": {
-    "dataSource": "db",
+    "dataSource": "mongo",
     "public": true
   },
   "UserAccount": {
-    "dataSource": "db",
+    "dataSource": "mongo",
     "public": true
   },
   "SolveITForum": {
-    "dataSource": "db",
+    "dataSource": "mongo",
     "public": true
   },
   "SolveIT-Discussion": {
-    "dataSource": "db",
+    "dataSource": "mongo",
     "public": true
   },
   "SolveIT-Discussion-Comment": {
-    "dataSource": "db",
+    "dataSource": "mongo",
     "public": true
   },
   "resource": {
-    "dataSource": "db",
+    "dataSource": "mongo",
     "public": true
   },
   "event": {
-    "dataSource": "db",
+    "dataSource": "mongo",
     "public": true
   },
   "storage": {
@@ -68,23 +68,23 @@
     "public": true
   },
   "forumCategory": {
-    "dataSource": "db",
+    "dataSource": "mongo",
     "public": true
   },
   "forum-member": {
-    "dataSource": "db",
+    "dataSource": "mongo",
     "public": true
   },
   "favourite-discussion": {
-    "dataSource": "db",
+    "dataSource": "mongo",
     "public": true
   },
   "solveit-project": {
-    "dataSource": "db",
+    "dataSource": "mongo",
     "public": true
   },
   "project-member": {
-    "dataSource": "db",
+    "dataSource": "mongo",
     "public": true
   }
 }

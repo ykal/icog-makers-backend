@@ -8,5 +8,15 @@
     "connector": "loopback-component-storage",
     "provider": "filesystem",
     "root": "./files"
+  },
+  "mongo": {
+    "host": "",
+    "port": 27017,
+    "url": "",
+    "database": "icog",
+    "password": "",
+    "name": "mongo",
+    "user": "",
+    "connector": "mongodb"
   }
 }

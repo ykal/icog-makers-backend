@@ -11,8 +11,12 @@
       "required": true
     },
     "description": {
-    	"type": "string",
-    	"required": true
+      "type": "string",
+      "required": true
+    },
+    "proposal": {
+      "type": "object",
+      "required": true
     }
   },
   "validations": [],
