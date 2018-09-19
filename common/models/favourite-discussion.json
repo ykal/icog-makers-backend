@@ -8,12 +8,12 @@
   "properties": {},
   "validations": [],
   "relations": {
-    "discussion": {
+    "Solveitdiscussion": {
       "type": "belongsTo",
       "model": "SolveIT-Discussion",
       "foreignKey": "discussionId"
     },
-    "user": {
+    "Useraccount": {
       "type": "belongsTo",
       "model": "UserAccount",
       "foreignKey": "userId"
