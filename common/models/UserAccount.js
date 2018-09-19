@@ -76,9 +76,12 @@ module.exports = function(Useraccount) {
   }
 
   Useraccount.searchUser = function(keyword, cb) {
-    Useraccount.find({where: {email: {like: keyword}}}, function(err, users){
-      cb(null, users);
-    });
+    const icogRole = Useraccount.app.models.Icogrole;
+    icogRole.find({where: {name: "solve-it-participants"}}, function(err, role){
+        Useraccount.find({where: {email: {like: keyword}, roleId: role.id}}, function(err, users){
+            cb(null, users);
+        });
+    })
   }
 
   Useraccount.getUserListByRole = function(roleId, cb) {

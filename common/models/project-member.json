@@ -8,12 +8,12 @@
   "properties": {},
   "validations": [],
   "relations": {
-    "project": {
+    "solveit-project": {
       "type": "belongsTo",
       "model": "solveit-project",
       "foreignKey": "projectId"
     },
-    "user": {
+    "userAccount": {
       "type": "belongsTo",
       "model": "UserAccount",
       "foreignKey": "userId"

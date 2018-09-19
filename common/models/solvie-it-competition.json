@@ -1,0 +1,29 @@
+{
+  "name": "solvieITCompetition",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "active": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "solveit-project": {
+      "type": "hasMany",
+      "model": "solveit-project",
+      "foriegnKey": "competitionId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}
