@@ -8,9 +8,9 @@
   "properties": {},
   "validations": [],
   "relations": {
-    "solveit-project": {
+    "solveitproject": {
       "type": "belongsTo",
-      "model": "solveit-project",
+      "model": "Solveitproject",
       "foreignKey": "projectId"
     },
     "userAccount": {

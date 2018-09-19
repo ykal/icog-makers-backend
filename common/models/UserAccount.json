@@ -69,12 +69,7 @@
     },
     "solveIT-discussions": {
       "type": "hasMany",
-      "model": "SolveIT-Discussion",
-      "foriegnKey": "userId"
-    },
-    "solveIT-discussion-comments": {
-      "type": "hasMany",
-      "model": "SolveIt-Discussion-Comment",
+      "model": "Solveitdiscussion",
       "foriegnKey": "userId"
     },
     "forums": {
@@ -85,13 +80,13 @@
     },
     "favouriteDiscussions": {
       "type": "hasMany",
-      "model": "SolveIT-Discussion",
+      "model": "Solveitdiscussion",
       "foreignKey": "userId",
-      "through": "favourite-discussion"
+      "through": "Favouritediscussion"
     },
     "projects": {
       "type": "hasMany",
-      "model": "solveit-project",
+      "model": "Solveitproject",
       "foreignKey": "userId",
       "through": "project-member"
     }

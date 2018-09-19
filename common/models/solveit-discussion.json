@@ -1,5 +1,5 @@
 {
-  "name": "SolveIT-Discussion",
+  "name": "Solveitdiscussion",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
@@ -35,7 +35,7 @@
       "type": "hasMany",
       "model": "UserAccount",
       "foreignKey": "discussionId",
-      "through": "favourite-discussion"
+      "through": "Favouritediscussion"
     }
   },
   "acls": [],

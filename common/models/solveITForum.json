@@ -33,7 +33,7 @@
   "relations": {
     "discussions": {
       "type": "hasMany",
-      "model": "SolveIT-Discussion",
+      "model": "Solveitdiscussion",
       "foreignKey": "forumId"
     },
     "category": {
