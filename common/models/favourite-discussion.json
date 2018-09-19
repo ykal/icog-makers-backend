@@ -1,5 +1,5 @@
 {
-  "name": "favourite-discussion",
+  "name": "Favouritediscussion",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
@@ -8,12 +8,12 @@
   "properties": {},
   "validations": [],
   "relations": {
-    "Solveitdiscussion": {
+    "solveitdiscussion": {
       "type": "belongsTo",
-      "model": "SolveIT-Discussion",
+      "model": "Solveitdiscussion",
       "foreignKey": "discussionId"
     },
-    "Useraccount": {
+    "userAccount": {
       "type": "belongsTo",
       "model": "UserAccount",
       "foreignKey": "userId"

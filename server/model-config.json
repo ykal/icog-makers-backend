@@ -47,7 +47,7 @@
     "dataSource": "mongo",
     "public": true
   },
-  "SolveIT-Discussion": {
+  "Solveitdiscussion": {
     "dataSource": "mongo",
     "public": true
   },
@@ -75,11 +75,11 @@
     "dataSource": "mongo",
     "public": true
   },
-  "favourite-discussion": {
+  "Favouritediscussion": {
     "dataSource": "mongo",
     "public": true
   },
-  "solveit-project": {
+  "Solveitproject": {
     "dataSource": "mongo",
     "public": true
   },
