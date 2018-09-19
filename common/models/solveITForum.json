@@ -14,6 +14,10 @@
       "type": "string",
       "required": true
     },
+    "created": {
+      "type": "string",
+      "required": true
+    },
     "private": {
       "type": "boolean",
       "required": true,
