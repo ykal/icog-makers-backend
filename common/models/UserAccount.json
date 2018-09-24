@@ -1,103 +1,101 @@
 {
-  "name": "UserAccount",
-  "base": "User",
-  "idInjection": true,
-  "options": {
-    "validateUpsert": true
-  },
-  "properties": {
-    "firstName": {
-      "type": "string",
-      "required": true,
-      "default": "None"
+    "name": "UserAccount",
+    "base": "User",
+    "idInjection": true,
+    "options": {
+        "validateUpsert": true
     },
-    "middleName": {
-      "type": "string",
-      "required": true,
-      "default": "None"
+    "properties": {
+        "firstName": {
+            "type": "string",
+            "required": true,
+            "default": "None"
+        },
+        "middleName": {
+            "type": "string",
+            "required": true,
+            "default": "None"
+        },
+        "lastName": {
+            "type": "string",
+            "required": true,
+            "default": "None"
+        },
+        "phoneNumber": {
+            "type": "string",
+            "required": true,
+            "default": "None"
+        },
+        "rememberMe": {
+            "type": "boolean"
+        },
+        "status": {
+            "type": "string",
+            "required": true,
+            "default": "ACTIVE"
+        },
+        "sex": {
+            "type": "string",
+            "required": "true",
+            "default": "None"
+        },
+        "age": {
+            "type": "number",
+            "required": "true",
+            "default": "None"
+        },
+        "educationLevel": {
+            "type": "string",
+            "required": "true",
+            "default": "None"
+        },
+        "workStatus": {
+            "type": "string",
+            "required": "true",
+            "default": "None"
+        },
+        "address": {
+            "type": "object",
+            "required": "true",
+            "default": "None"
+        }
     },
-    "lastName": {
-      "type": "string",
-      "required": true,
-      "default": "None"
+    "validations": [],
+    "relations": {
+        "role": {
+            "type": "belongsTo",
+            "model": "Icog-Role",
+            "foreignKey": "roleId"
+        },
+        "solveIT-discussions": {
+            "type": "hasMany",
+            "model": "Solveitdiscussion",
+            "foriegnKey": "userAccountId"
+        },
+        "forums": {
+            "type": "hasMany",
+            "model": "SolveITForum",
+            "foreignKey": "userId",
+            "through": "forum_member"
+        },
+        "favouriteDiscussions": {
+            "type": "hasMany",
+            "model": "Solveitdiscussion",
+            "foreignKey": "userId",
+            "through": "Favouritediscussion"
+        },
+        "projects": {
+            "type": "hasMany",
+            "model": "Solveitproject",
+            "foreignKey": "userId",
+            "through": "project-member"
+        }
     },
-    "phoneNumber": {
-      "type": "string",
-      "required": true,
-      "default": "None"
-    },
-    "rememberMe": {
-      "type": "boolean"
-    },
-    "status": {
-      "type": "string",
-      "required": true,
-      "default": "ACTIVE"
-    },
-    "sex": {
-      "type": "string",
-      "required": "true",
-      "default": "None"
-    },
-    "age": {
-      "type": "number",
-      "required": "true",
-      "default": "None"
-    },
-    "educationLevel": {
-      "type": "string",
-      "required": "true",
-      "default": "None"
-    },
-    "workStatus": {
-      "type": "string",
-      "required": "true",
-      "default": "None"
-    },
-    "address": {
-      "type": "object",
-      "required": "true",
-      "default": "None"
-    }
-  },
-  "validations": [],
-  "relations": {
-    "role": {
-      "type": "belongsTo",
-      "model": "Icog-Role",
-      "foreignKey": "roleId"
-    },
-    "solveIT-discussions": {
-      "type": "hasMany",
-      "model": "Solveitdiscussion",
-      "foriegnKey": "userId"
-    },
-    "forums": {
-      "type": "hasMany",
-      "model": "SolveITForum",
-      "foreignKey": "userId",
-      "through": "forum_member"
-    },
-    "favouriteDiscussions": {
-      "type": "hasMany",
-      "model": "Solveitdiscussion",
-      "foreignKey": "userId",
-      "through": "Favouritediscussion"
-    },
-    "projects": {
-      "type": "hasMany",
-      "model": "Solveitproject",
-      "foreignKey": "userId",
-      "through": "project-member"
-    }
-  },
-  "acls": [
-    {
-      "accessType": "*",
-      "principalType": "ROLE",
-      "principalId": "$unauthenticated",
-      "permission": "ALLOW"
-    }
-  ],
-  "methods": {}
+    "acls": [{
+        "accessType": "*",
+        "principalType": "ROLE",
+        "principalId": "$unauthenticated",
+        "permission": "ALLOW"
+    }],
+    "methods": {}
 }
