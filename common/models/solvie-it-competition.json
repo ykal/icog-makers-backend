@@ -14,6 +14,11 @@
     "name": {
       "type": "string",
       "required": true
+    },
+    "startingDate": {
+      "type": "date",
+      "required": true,
+      "defaultFn": "now"
     }
   },
   "validations": [],

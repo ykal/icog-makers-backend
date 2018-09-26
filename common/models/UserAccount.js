@@ -76,12 +76,16 @@ module.exports = function(Useraccount) {
     }
 
     Useraccount.searchUser = function(keyword, cb) {
-        const icogRole = Useraccount.app.models.Icogrole;
-        icogRole.find({ where: { name: "solve-it-participants" } }, function(err, role) {
-            Useraccount.find({ where: { email: { like: keyword }, roleId: role.id } }, function(err, users) {
-                cb(null, users);
-            });
-        })
+        if (keyword.trim() !== '') {
+          let { IcogRole } = Useraccount.app.models;
+          IcogRole.find({ where: { name: "solve-it-participants" } }, function(err, role) {
+              Useraccount.find({ where: { email: { like: keyword }, roleId: role.id } }, function(err, users) {
+                  cb(null, users);
+              });
+          });
+        } else {
+          cb(null, []);
+        }
     }
 
     Useraccount.getUserListByRole = function(roleId, cb) {
