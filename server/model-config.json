@@ -90,5 +90,13 @@
   "solvieITCompetition": {
     "dataSource": "mongo",
     "public": true
+  },
+  "ProgressReport": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "CompetitionProject": {
+    "dataSource": "mongo",
+    "public": true
   }
 }

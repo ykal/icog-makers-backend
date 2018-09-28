@@ -23,10 +23,11 @@
   },
   "validations": [],
   "relations": {
-    "solveit-project": {
+    "projects": {
       "type": "hasMany",
-      "model": "solveit-project",
-      "foriegnKey": "competitionId"
+      "model": "Solveitproject",
+      "foreignKey": "competitionId",
+      "through": "CompetitionProject"
     }
   },
   "acls": [],

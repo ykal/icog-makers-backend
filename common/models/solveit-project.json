@@ -30,6 +30,17 @@
       "model": "UserAccount",
       "foreignKey": "projectId",
       "through": "project-member"
+    },
+    "reports": {
+      "type": "hasMany",
+      "model": "ProgressReport",
+      "foreignKey": "projectId"
+    },
+    "competitions": {
+      "type": "hasMany",
+      "model": "solvieITCompetition",
+      "foreignKey": "projectId",
+      "through": "CompetitionProject"
     }
   },
   "acls": [],

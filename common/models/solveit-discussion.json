@@ -1,48 +1,48 @@
 {
-    "name": "Solveitdiscussion",
-    "base": "PersistedModel",
-    "idInjection": true,
-    "options": {
-        "validateUpsert": true
+  "name": "Solveitdiscussion",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "slung": {
+      "type": "string",
+      "required": true
     },
-    "properties": {
-        "slung": {
-            "type": "string",
-            "required": true
-        },
-        "createdAt": {
-            "type": "date",
-            "required": true,
-            "defaultFn": "now"
-        },
-        "content": {
-            "type": "string",
-            "required": true
-        },
-        "pinned": {
-            "type": "boolean",
-            "default": false
-        }
+    "createdAt": {
+      "type": "date",
+      "required": true,
+      "defaultFn": "now"
     },
-    "validations": [],
-    "relations": {
-        "comments": {
-            "type": "hasMany",
-            "model": "SolveIT-Discussion-Comment",
-            "foriegnKey": "discussionId"
-        },
-        "favouriteUsers": {
-            "type": "hasMany",
-            "model": "UserAccount",
-            "foreignKey": "discussionId",
-            "through": "Favouritediscussion"
-        },
-        "user": {
-            "type": "belongsTo",
-            "model": "UserAccount",
-            "foreignKey": "userAccountId"
-        }
+    "content": {
+      "type": "string",
+      "required": true
     },
-    "acls": [],
-    "methods": {}
+    "pinned": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "validations": [],
+  "relations": {
+    "comments": {
+      "type": "hasMany",
+      "model": "SolveIT-Discussion-Comment",
+      "foriegnKey": "discussionId"
+    },
+    "favouriteUsers": {
+      "type": "hasMany",
+      "model": "UserAccount",
+      "foreignKey": "discussionId",
+      "through": "Favouritediscussion"
+    },
+    "user": {
+      "type": "belongsTo",
+      "model": "UserAccount",
+      "foreignKey": "userAccountId"
+    }
+  },
+  "acls": [],
+  "methods": {}
 }

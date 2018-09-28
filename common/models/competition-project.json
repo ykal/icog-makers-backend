@@ -1,0 +1,24 @@
+{
+  "name": "CompetitionProject",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {},
+  "validations": [],
+  "relations": {
+    "solveitproject": {
+      "type": "belongsTo",
+      "model": "Solveitproject",
+      "foreignKey": "projectId"
+    },
+    "competition": {
+      "type": "belongsTo",
+      "model": "solvieITCompetition",
+      "foreignKey": "competitionId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}
