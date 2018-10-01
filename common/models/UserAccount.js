@@ -79,16 +79,29 @@ module.exports = function(Useraccount) {
     }
 
     Useraccount.searchUser = function(keyword, cb) {
-        if (keyword.trim() !== '') {
-          let { IcogRole } = Useraccount.app.models;
-          IcogRole.find({ where: { name: "solve-it-participants" } }, function(err, role) {
-              Useraccount.find({ where: { email: { like: keyword }, roleId: role.id } }, function(err, users) {
-                  cb(null, users);
-              });
-          });
-        } else {
-          cb(null, []);
-        }
+      let pattern = new RegExp('.*'+ keyword+ '.*', "i"); /* case-insensitive RegExp search */
+      if (keyword.trim() !== '') {
+        let { IcogRole } = Useraccount.app.models;
+        IcogRole.findOne({ where: { name: "solve-it-participants" } }, function(err, role) {
+            Useraccount.find({ where: { and: [
+                                              { roleId: role.id },
+                                              { or: [
+                                                      { email: { like: pattern } },
+                                                      { firstName: { like: pattern } },
+                                                      { middleName: { like: pattern } },
+                                                      { lastName: { like: pattern } },
+                                                      { username: { like: pattern } }
+                                                    ]
+                                              }
+                                            ]
+                                          }
+                                        }, function(err, users) {
+                cb(null, users);
+            });
+        });
+      } else {
+        cb(null, []);
+      }
     }
 
     Useraccount.getUserListByRole = function(roleId, cb) {
