@@ -3,11 +3,12 @@ let STATUS = require('../configs/config');
 
 module.exports = function(Useraccount) {
 
-    // validate uniqueness phoneNumber field
+    // validate uniqueness of username & phoneNumber fields
     Useraccount.validatesUniquenessOf("phoneNumber", { message: "Phone Number is not unique." });
+    Useraccount.validatesUniquenessOf("username", { message: "User name is not unique." });
 
     // register SolveIT managment members
-    Useraccount.registerSolveItMgt = async(firstName, middleName, lastName, email, password, phoneNumber) => {
+    Useraccount.registerSolveItMgt = async(firstName, middleName, lastName, email, password, phoneNumber, username) => {
         let { IcogRole } = Useraccount.app.models;
         let userRole = await IcogRole.findOne({ where: { name: "solve-it-mgt" } });
         let user = {
@@ -17,6 +18,7 @@ module.exports = function(Useraccount) {
             "phoneNumber": phoneNumber,
             "password": password,
             "email": email,
+            "username": username,
             "roleId": userRole.id,
             "created": new Date().toISOString()
         };
@@ -27,7 +29,7 @@ module.exports = function(Useraccount) {
     }
 
     // register SolveIT teams
-    Useraccount.registerSolveItTeam = async(firstName, middleName, lastName, email, password, phoneNumber) => {
+    Useraccount.registerSolveItTeam = async(firstName, middleName, lastName, email, password, phoneNumber, username) => {
         let { IcogRole } = Useraccount.app.models;
         let userRole = await IcogRole.findOne({ where: { name: "solve-it-team" } });
 
@@ -38,6 +40,7 @@ module.exports = function(Useraccount) {
             "phoneNumber": phoneNumber,
             "password": password,
             "email": email,
+            "username": username,
             "roleId": userRole.id,
             "created": new Date().toISOString()
         };
@@ -118,7 +121,8 @@ module.exports = function(Useraccount) {
             { arg: "lastName", type: "string", required: true },
             { arg: "email", type: "string", required: true },
             { arg: "password", type: "string", required: true },
-            { arg: "phoneNumber", type: "string", required: true }
+            { arg: "phoneNumber", type: "string", required: true },
+            { arg: "username", type: "string", require: true }
         ],
         http: {
             verb: "post",
@@ -138,7 +142,8 @@ module.exports = function(Useraccount) {
             { arg: "lastName", type: "string", required: true },
             { arg: "email", type: "string", required: true },
             { arg: "password", type: "string", required: true },
-            { arg: "phoneNumber", type: "string", required: true }
+            { arg: "phoneNumber", type: "string", required: true },
+            { arg: "username", type: "string", require: true }
         ],
         http: {
             verb: "post",

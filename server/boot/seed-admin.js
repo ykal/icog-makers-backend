@@ -9,7 +9,8 @@ module.exports = function(app) {
     let admin ={
       "email": "admin@solveit.com",
       "password": "solveitadminpass",
-      "roleId": role.id
+      "roleId": role.id,
+      "username": "admin"
     }
     return UserAccount.findOrCreate({"where": {"email": "admin@solveit.com"}}, admin)
     .then(instance => Promise.resolve(instance))
