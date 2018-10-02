@@ -3,10 +3,10 @@
 module.exports = function(Solveitdiscussion) {
 
     Solveitdiscussion.getBySlung = function(slung, cb) {
-        Solveitdiscussion.find({ where: { slung: slung } }, function(err, discussion) {
+        Solveitdiscussion.findOne({ where: { slung: slung } }, function(err, discussion) {
             let { UserAccount } = Solveitdiscussion.app.models;
-            UserAccount.findOne({ where: { id: discussion.userAccountId } }, function(err, user) {
-                console.log(user);
+            let userId = discussion.userAccountId;
+            UserAccount.findOne({ where: { id: userId } }, function(err, user) {
                 cb(null, { discussion: discussion, user: user });
             });
         });
