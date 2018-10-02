@@ -98,5 +98,9 @@
   "CompetitionProject": {
     "dataSource": "mongo",
     "public": true
+  },
+  "BlackListedDiscussion": {
+    "dataSource": "mongo",
+    "public": true
   }
 }

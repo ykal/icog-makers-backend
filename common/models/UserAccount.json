@@ -93,6 +93,12 @@
       "model": "Solveitproject",
       "foreignKey": "userId",
       "through": "project-member"
+    },
+    "blackListed": {
+      "type": "hasMany",
+      "model": "Solveitdiscussion",
+      "foreignKey": "userId",
+      "through": "BlackListedDiscussion"
     }
   },
   "acls": [

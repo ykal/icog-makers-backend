@@ -1,0 +1,25 @@
+{
+  "name": "BlackListedDiscussion",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+  },
+  "validations": [],
+  "relations": {
+    "solveitdiscussion": {
+      "type": "belongsTo",
+      "model": "Solveitdiscussion",
+      "foreignKey": "discussionId"
+    },
+    "userAccount": {
+      "type": "belongsTo",
+      "model": "UserAccount",
+      "foreignKey": "userId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

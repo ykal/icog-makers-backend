@@ -41,6 +41,12 @@
       "type": "belongsTo",
       "model": "UserAccount",
       "foreignKey": "userAccountId"
+    },
+    "blackListed": {
+      "type": "hasMany",
+      "model": "UserAccount",
+      "foreignKey": "discussionId",
+      "through": "BlackListedDiscussion"
     }
   },
   "acls": [],
