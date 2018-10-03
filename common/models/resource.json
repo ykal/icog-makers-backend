@@ -29,6 +29,10 @@
     "description": {
       "type": "string",
       "required": true
+    },
+    "createdAt": {
+      "type": "date",
+      "defaultfun": "now"
     }
   },
   "validations": [],
