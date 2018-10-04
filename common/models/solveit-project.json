@@ -21,6 +21,10 @@
     "showcased": {
       "type": "boolean",
       "default": false
+    },
+    "createdAt": {
+      "type": "date",
+      "defaultfun": "now"
     }
   },
   "validations": [],

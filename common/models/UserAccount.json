@@ -99,6 +99,11 @@
       "model": "Solveitdiscussion",
       "foreignKey": "userId",
       "through": "BlackListedDiscussion"
+    },
+    "progressComments": {
+      "type": "hasMany",
+      "model": "progressComment",
+      "foreignKey": "userId"
     }
   },
   "acls": [

@@ -44,7 +44,7 @@
     },
     "blackListed": {
       "type": "hasMany",
-      "model": "UserAccount",
+      "model": "progressComment",
       "foreignKey": "discussionId",
       "through": "BlackListedDiscussion"
     }

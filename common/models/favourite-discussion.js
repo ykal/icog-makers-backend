@@ -13,13 +13,11 @@ module.exports = function(Favouritediscussion) {
     Favouritediscussion.find({where: {and: [{userId: userId}, {discussionId: discussionId}]}},
                         function (err, existingFav) {
                           if (existingFav.length > 0) {
-                            console.log("inside if ")
                             var error = new Error();
                             error.status = 422;
                             error.message = "Combination of user and discussion already existed.";
                             next(error);
                           } else {
-                            console.log("inside else ")
                            next();
                           }
                         });
