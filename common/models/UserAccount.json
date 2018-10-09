@@ -71,6 +71,11 @@
       "model": "Icog-Role",
       "foreignKey": "roleId"
     },
+    "region": {
+      "type": "belongsTo",
+      "model": "Region",
+      "foreignKey": "regionId"
+    },
     "solveIT-discussions": {
       "type": "hasMany",
       "model": "Solveitdiscussion",
