@@ -29,7 +29,7 @@ module.exports = function(Solveitdiscussion) {
       Forum.updateAll({ id: context.args.data.forumId }, { discussionCount: discussionCount }, function(err, count) {
         if (err) {
             console.error(err);
-            next();
+            next(err);
         }
         next();
       })

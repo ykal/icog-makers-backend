@@ -1,11 +1,65 @@
 'use strict';
 let STATUS = require('../configs/config');
+const uniqueid = require('uniqid');
 
 module.exports = function(Useraccount) {
 
     // validate uniqueness of username & phoneNumber fields
     Useraccount.validatesUniquenessOf("phoneNumber", { message: "Phone Number is not unique." });
     Useraccount.validatesUniquenessOf("username", { message: "User name is not unique." });
+
+    Useraccount.observe('after save', function(ctx, next) {
+
+      if(ctx.instance !== undefined) {
+        let { emailConfirmationId } = Useraccount.app.models;
+        let { Email } = Useraccount.app.models;
+        let cId = uniqueid();
+        let email = ctx.instance.email;
+        let userId = ctx.instance.id;
+        let html = `<p>Hello <b>${ctx.instance.firstName}</b>, Welcome to SolveIT competition. Pleace confirm your email address by following the link below. </p>
+                    <a href="http://localhost:4200/confirm/${userId}-${cId}">confirmation link</a>`
+        emailConfirmationId.create({cId: cId, userId: userId}, function(err, data) {
+          if (err) {
+            next(err);
+            return;
+          }
+          Email.send({
+            to: email,
+            from: 'kal.a.yitbarek@gmail.com',
+            subject: 'Welcome to SolveIT',
+            html: html
+          }, function(err, mail) {
+            if (err) {
+              console.log("Error while sending email ", err);
+              next(err);
+            }
+            console.log('email sent!');
+            next();
+          });
+        })
+      } else {
+        console.log("update");
+      }
+    });
+
+    // check if email is verified before login
+    Useraccount.beforeRemote('login', function (ctx, unused, next) {
+      console.log('loging in');
+      let email = ctx.args.credentials.email;
+      let pass = ctx.args.credentials.password;
+      Useraccount.findOne({where: {email: email}}, function(err, data) {
+        if (err) {
+          next(err);
+        } else {
+          if (data.emailVerified) {
+            next();
+          } else {
+            let error = new Error();
+            next(error);
+          }
+        }
+      });
+    });
 
     // register SolveIT managment members
     Useraccount.registerSolveItMgt = async(firstName, middleName, lastName, email, password, phoneNumber, username) => {
@@ -26,6 +80,7 @@ module.exports = function(Useraccount) {
         user = await Useraccount.create(user);
 
         return user;
+
     }
 
     // register SolveIT teams
@@ -69,6 +124,23 @@ module.exports = function(Useraccount) {
 
         let updatedUser = await user.updateAttribute('status', STATUS[1]);
         return user;
+    }
+
+    // confirm email address
+    Useraccount.confirmEmail = async(userId, cid, cb) => {
+      let { emailConfirmationId } = Useraccount.app.models;
+      let record = await emailConfirmationId.findOne({ where: {cId: cid}});
+      if (record !== null && userId === record.userId) {
+        Useraccount.updateAll({id: userId}, {emailVerified: true}, function(err, data) {
+          if (err) {
+            console.log("error");
+          }
+          cb(null, true);
+        });
+      } else {
+        let err = new Error();
+        cb(err);
+      }
     }
 
     Useraccount.deactivateUser = async(userId) => {
@@ -197,7 +269,7 @@ module.exports = function(Useraccount) {
     });
 
     Useraccount.remoteMethod("deactivateUser", {
-        desctiption: "Deactivate registered user",
+        description: "Deactivate registered user",
         accepts: { arg: "userId", type: "string", require: true },
         http: {
             verb: "post",
@@ -209,4 +281,19 @@ module.exports = function(Useraccount) {
         }
     });
 
+    Useraccount.remoteMethod("confirmEmail", {
+      description: "Confirm email address",
+      accepts: [
+        { arg: "userId", type: "string", require: true },
+        { arg: "cid", type: "string", require: true}
+      ],
+      http: {
+        verb: "post",
+        path: "/confirmEmail"
+      },
+      returns: {
+        type: "boolean",
+        arg: "result"
+      }
+    });
 };

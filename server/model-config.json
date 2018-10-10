@@ -106,5 +106,12 @@
   "progressComment": {
     "dataSource": "mongo",
     "public": true
+  },
+  "Email": {
+    "dataSource": "email"
+  },
+  "emailConfirmationId": {
+    "dataSource": "mongo",
+    "public": false
   }
 }
