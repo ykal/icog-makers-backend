@@ -66,6 +66,11 @@
     "emailVerified": {
       "type": "boolean",
       "default": false
+    },
+    "userType": {
+      "type": "string",
+      "required": false,
+      "default": "None"
     }
   },
   "validations": [],
