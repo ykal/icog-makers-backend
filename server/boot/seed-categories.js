@@ -2,7 +2,7 @@
 
 module.exports = function(app) {
   const { forumCategory } = app.models;
-  const { UserAccount } = app.models;
+  const { tag } = app.models;
 
   const categories = [
     "Python",
@@ -11,6 +11,14 @@ module.exports = function(app) {
     "AI",
     "Robotics",
     "Others"
+  ];
+
+  const tags = [
+    "PHP",
+    "OOP",
+    "Node",
+    "Machine Learning",
+    "Deep Learning"
   ];
 
   let populateCategories = async () =>  {
@@ -26,5 +34,18 @@ module.exports = function(app) {
     }
   };
 
+  let populateTags = async () => {
+    for (let i = 0; i < tags.length; i++) {
+      tag.findOrCreate({where: {name: tags[i]}}, {name: tags[i]})
+      .then(res => {
+        console.log("Tag item added.");
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    }
+  }
+
   populateCategories();
+  populateTags();
 };

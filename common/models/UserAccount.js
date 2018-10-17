@@ -48,6 +48,7 @@ module.exports = function(Useraccount) {
       let email = ctx.args.credentials.email;
       let pass = ctx.args.credentials.password;
       Useraccount.findOne({where: {email: email}}, function(err, data) {
+        console.log(data);
         if (err) {
           next(err);
         } else {

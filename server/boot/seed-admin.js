@@ -5,12 +5,13 @@ module.exports = function(app) {
   const { UserAccount } = app.models;
 
   let createAdmin = async () =>  {
-    let role = await IcogRole.find({"where": {"name": "admin"}});
+    let role = await IcogRole.findOne({"where": {"name": "admin"}});
     let admin ={
       "email": "admin@solveit.com",
       "password": "solveitadminpass",
       "roleId": role.id,
-      "username": "admin"
+      "username": "admin",
+      "emailVerified": true
     }
     return UserAccount.findOrCreate({"where": {"email": "admin@solveit.com"}}, admin)
     .then(instance => Promise.resolve(instance))

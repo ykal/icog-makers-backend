@@ -1,0 +1,24 @@
+{
+  "name": "taggedDiscussion",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {},
+  "validations": [],
+  "relations": {
+    "solveitdiscussion": {
+      "type": "belongsTo",
+      "model": "Solveitdiscussion",
+      "foreignKey": "discussionId"
+    },
+    "tag": {
+      "type": "belongsTo",
+      "model": "tag",
+      "foreignKey": "tagId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

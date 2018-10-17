@@ -1,22 +1,25 @@
 {
-  "name": "emailConfirmationId",
+  "name": "tag",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true
   },
   "properties": {
-    "cId": {
-      "type": "string",
-      "required": true
-    },
-    "userId": {
+    "name": {
       "type": "string",
       "required": true
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "discussions": {
+      "type": "hasMany",
+      "model": "Solveitdiscussion",
+      "foreignKey": "tagId",
+      "through": "taggedDiscussion"
+    }
+  },
   "acls": [],
   "methods": {}
 }

@@ -51,6 +51,12 @@
       "model": "progressComment",
       "foreignKey": "discussionId",
       "through": "BlackListedDiscussion"
+    },
+    "tags": {
+      "type": "hasMany",
+      "model": "tag",
+      "foreignKey": "discussionId",
+      "through": "taggedDiscussion"
     }
   },
   "acls": [],
