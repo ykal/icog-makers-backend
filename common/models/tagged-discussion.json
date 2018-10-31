@@ -1,5 +1,5 @@
 {
-  "name": "BlackListedDiscussion",
+  "name": "taggedDiscussion",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
@@ -13,10 +13,10 @@
       "model": "Solveitdiscussion",
       "foreignKey": "discussionId"
     },
-    "userAccount": {
+    "tag": {
       "type": "belongsTo",
-      "model": "UserAccount",
-      "foreignKey": "userId"
+      "model": "tag",
+      "foreignKey": "tagId"
     }
   },
   "acls": [],

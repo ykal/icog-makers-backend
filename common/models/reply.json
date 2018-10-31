@@ -1,5 +1,5 @@
 {
-  "name": "SolveIT-Discussion-Comment",
+  "name": "reply",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
@@ -9,11 +9,6 @@
     "content": {
       "type": "string",
       "required": true
-    },
-    "createdAt": {
-      "type": "date",
-      "required": true,
-      "defaultFn": "now"
     }
   },
   "validations": [],
@@ -21,11 +16,6 @@
     "user": {
       "type": "belongsTo",
       "model": "UserAccount"
-    },
-    "replies": {
-      "type": "hasMany",
-      "model": "reply",
-      "foriegnKey": "commentId"
     }
   },
   "acls": [],

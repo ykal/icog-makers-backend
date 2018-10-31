@@ -62,6 +62,15 @@
       "type": "object",
       "required": "true",
       "default": "None"
+    },
+    "emailVerified": {
+      "type": "boolean",
+      "default": false
+    },
+    "userType": {
+      "type": "string",
+      "required": false,
+      "default": "None"
     }
   },
   "validations": [],
@@ -70,6 +79,11 @@
       "type": "belongsTo",
       "model": "Icog-Role",
       "foreignKey": "roleId"
+    },
+    "region": {
+      "type": "belongsTo",
+      "model": "Region",
+      "foreignKey": "regionId"
     },
     "solveIT-discussions": {
       "type": "hasMany",

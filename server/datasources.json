@@ -18,5 +18,21 @@
     "name": "mongo",
     "user": "",
     "connector": "mongodb"
+  },
+  "email": {
+    "name": "email",
+    "connector": "mail",
+    "transports": [
+      {
+        "type": "SMTP",
+        "host": "smtp.gmail.com",
+        "secure": true,
+        "port": 465,
+        "auth": {
+          "user": "kal.a.yitbarek@gmail.com",
+          "pass": "Kalzbest1"
+        }
+      }
+    ]
   }
 }

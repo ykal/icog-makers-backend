@@ -106,5 +106,28 @@
   "progressComment": {
     "dataSource": "mongo",
     "public": true
+  },
+  "Email": {
+    "dataSource": "email"
+  },
+  "emailConfirmationId": {
+    "dataSource": "mongo",
+    "public": false
+  },
+  "Region": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "reply": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "tag": {
+    "dataSource": "mongo",
+    "public": true
+  },
+  "taggedDiscussion": {
+    "dataSource": "mongo",
+    "public": true
   }
 }

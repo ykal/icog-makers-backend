@@ -19,6 +19,10 @@
       "type": "string",
       "required": true
     },
+    "title": {
+      "type": "string",
+      "required": "true"
+    },
     "pinned": {
       "type": "boolean",
       "default": false
@@ -47,6 +51,12 @@
       "model": "progressComment",
       "foreignKey": "discussionId",
       "through": "BlackListedDiscussion"
+    },
+    "tags": {
+      "type": "hasMany",
+      "model": "tag",
+      "foreignKey": "discussionId",
+      "through": "taggedDiscussion"
     }
   },
   "acls": [],
