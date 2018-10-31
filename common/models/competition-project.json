@@ -5,7 +5,12 @@
   "options": {
     "validateUpsert": true
   },
-  "properties": {},
+  "properties": {
+    "questionnaireAnswers": {
+      "type": "object",
+      "required": "true"
+    }
+  },
   "validations": [],
   "relations": {
     "solveitproject": {
