@@ -19,8 +19,8 @@
       "type": "date",
       "required": true
     },
-    "imgUrl": {
-      "type": "string",
+    "img": {
+      "type": "object",
       "required": true
     }
   },
