@@ -1,0 +1,34 @@
+{
+  "name": "weekTopProject",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "week": {
+      "type": "string",
+      "required": true
+    },
+    "active": {
+      "type": "boolean",
+      "required": true,
+      "default": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "solveitproject": {
+      "type": "belongsTo",
+      "model": "Solveitproject",
+      "foreignKey": "projectId"
+    },
+    "competition": {
+      "type": "belongsTo",
+      "model": "solvieITCompetition",
+      "foreignKey": "competitionId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

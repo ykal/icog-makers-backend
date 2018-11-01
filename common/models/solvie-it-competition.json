@@ -28,6 +28,12 @@
       "model": "Solveitproject",
       "foreignKey": "competitionId",
       "through": "CompetitionProject"
+    },
+    "winner": {
+      "type": "hasMany",
+      "model": "Solveitproject",
+      "foreignKey": "competitionId",
+      "through": "competitionWinner"
     }
   },
   "acls": [],
