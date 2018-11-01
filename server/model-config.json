@@ -129,5 +129,13 @@
   "taggedDiscussion": {
     "dataSource": "mongo",
     "public": true
+  },
+  "competitionWinner": {
+    "dataSource": "db",
+    "public": true
+  },
+  "weekTopProject": {
+    "dataSource": "db",
+    "public": true
   }
 }
