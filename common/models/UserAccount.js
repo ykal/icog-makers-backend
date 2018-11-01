@@ -1,4 +1,5 @@
 'use strict';
+var Excel = require('exceljs');
 let STATUS = require('../configs/config');
 const uniqueid = require('uniqid');
 
@@ -182,6 +183,98 @@ module.exports = function(Useraccount) {
             cb(null, users);
         });
     }
+
+    Useraccount.exportData = async(selectionOptions, res) => {
+        var workbook = new Excel.Workbook();
+        var sheet = workbook.addWorksheet("report");
+        
+        const { IcogRole } = Useraccount.app.models;
+        const City = Useraccount.app.models.City;
+
+        const role = await IcogRole.findOne({ where: { name: "solve-it-participants" } });
+        
+        var sex = selectionOptions.sex;
+        var educationLevel = selectionOptions.educationLevel;
+        var cities = [];
+        var users = [];
+
+        if (selectionOptions.selectedCity === 0) {
+            cities = await City.find({include: 'Region'});
+        } else {
+            let city = await City.find({where: {id: selectionOptions.selectedCity}, include: 'Region'});
+            cities.push(city);
+        }
+        sheet.columns = [
+            { header: 'Region', key: 'region', width: 10},
+            { header: 'City', key: 'city', width: 10 },
+            { header: 'First Name', key: 'firstName', width: 10},							
+            { header: 'Last Name', key: 'lastName', width: 10},
+            { header: 'Age', key: 'age', width: 10},
+            { header: 'Sex', key: 'sex', width: 10 },							
+            { header: 'Phone Number', key: 'phoneNumber', width: 10}							
+        ];
+
+        if (sex == 'both' && educationLevel == 'none') {
+            for (const city of cities) {
+                users = await Useraccount.find({where: {cityId: city.id}});
+                for (const user of users) {
+                    sheet.addRow({region: city.region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, age: user.age, sex: user.sex, phoneNumber: user.phoneNumber});                    
+                }
+            }
+        }else if(sex == 'both' || educationLevel == 'none') {
+            if (sex == 'both') {
+                for (const city of cities) {
+                    users = await Useraccount.find({where: {cityId: city.id, educationLevel: educationLevel}});
+                    for (const user of users) {
+                        sheet.addRow({region: city.region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, age: user.age, sex: user.sex, phoneNumber: user.phoneNumber});                    
+                    }
+                }
+            }else {
+                for (const city of cities) {
+                    users = await Useraccount.find({where: {cityId: city.id, sex: sex}});
+                    for (const user of users) {
+                        sheet.addRow({region: city.region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, age: user.age, sex: user.sex, phoneNumber: user.phoneNumber});                    
+                    }
+                }
+            }
+        }else {
+            for (const city of cities) {
+                users = await Useraccount.find({where: {cityId: city.id, educationLevel: educationLevel, sex: sex}});
+                for (const user of users) {
+                    sheet.addRow({region: city.region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, age: user.age, sex: user.sex, phoneNumber: user.phoneNumber});                    
+                }
+            }
+        }
+
+        await sendWorkbook(workbook, res);
+    }
+
+    async function sendWorkbook(workbook, response) { 
+        var fileName = 'ExportedData.xlsx';
+    
+        response.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+    
+        await workbook.xlsx.write(response);
+    
+		response.end();
+    }
+
+	Useraccount.remoteMethod("exportData", {
+	    description: "return data.",
+	    accepts: [
+		  { arg: "selectionOptions", type: "object", required: true },
+		  {arg: 'res', type: 'object', 'http': {source: 'res'}}
+	    ],
+	    http: {
+	      verb: "post",
+	      path: "/exportData"
+	    },
+	    returns: {
+	      type: "object",
+	      root: true
+	    }
+	});
 
     Useraccount.remoteMethod(
         'searchUser', {
