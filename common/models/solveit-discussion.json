@@ -23,6 +23,9 @@
       "type": "string",
       "required": "true"
     },
+    "imgContent": {
+      "type": "object"
+    },
     "pinned": {
       "type": "boolean",
       "default": false

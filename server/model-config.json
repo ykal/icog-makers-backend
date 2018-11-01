@@ -130,6 +130,10 @@
     "dataSource": "mongo",
     "public": true
   },
+  "news": {
+    "dataSource": "mongo",
+    "public": true
+  },
   "competitionWinner": {
     "dataSource": "db",
     "public": true

@@ -6,10 +6,15 @@
     "validateUpsert": true
   },
   "properties": {
-    "date": {
+    "startDate": {
       "type": "date",
       "required": true,
       "defaultFn": "now"
+    },
+    "endDate": {
+      "type": "date",
+      "required": true,
+      "dfaultFn": "now"
     },
     "title": {
       "type": "string",
@@ -17,8 +22,21 @@
     },
     "description": {
       "type": "string",
-      "required": false
+      "required": true
+    },
+    "city": {
+      "type": "string",
+      "required": true
+    },
+    "place": {
+      "type": "string",
+      "required": true
+    },
+    "venue": {
+      "type": "string",
+      "required": true
     }
+
   },
   "validations": [],
   "relations": {},
