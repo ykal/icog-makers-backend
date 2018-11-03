@@ -38,13 +38,13 @@
       "required": true,
       "default": "ACTIVE"
     },
-    "sex": {
+    "gender": {
       "type": "string",
       "required": "true",
       "default": "None"
     },
-    "age": {
-      "type": "number",
+    "birthDay": {
+      "type": "date",
       "required": "true",
       "default": "None"
     },

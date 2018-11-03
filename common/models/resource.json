@@ -20,10 +20,8 @@
       "type": "string",
       "required": true
     },
-    "categories": {
-      "type": [
-        "string"
-      ],
+    "category": {
+      "type": "string",
       "required": true
     },
     "description": {
