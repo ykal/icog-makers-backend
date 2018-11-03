@@ -45,6 +45,12 @@
       "model": "solvieITCompetition",
       "foreignKey": "projectId",
       "through": "CompetitionProject"
+    },
+    "won": {
+      "type": "hasMany",
+      "model": "solvieITCompetition",
+      "foreignKey": "projectId",
+      "through": "competitionWinner"
     }
   },
   "acls": [],

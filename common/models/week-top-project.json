@@ -1,14 +1,19 @@
 {
-  "name": "CompetitionProject",
+  "name": "weekTopProject",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true
   },
   "properties": {
-    "questionnaireAnswers": {
-      "type": "object",
-      "required": "true"
+    "week": {
+      "type": "string",
+      "required": true
+    },
+    "active": {
+      "type": "boolean",
+      "required": true,
+      "default": true
     }
   },
   "validations": [],

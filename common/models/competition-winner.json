@@ -1,14 +1,15 @@
 {
-  "name": "CompetitionProject",
+  "name": "competitionWinner",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true
   },
   "properties": {
-    "questionnaireAnswers": {
-      "type": "object",
-      "required": "true"
+    "active": {
+      "type": "boolean",
+      "required": true,
+      "default": true
     }
   },
   "validations": [],

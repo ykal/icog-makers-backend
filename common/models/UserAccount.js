@@ -1,11 +1,67 @@
 'use strict';
+var Excel = require('exceljs');
 let STATUS = require('../configs/config');
+const uniqueid = require('uniqid');
 
 module.exports = function(Useraccount) {
 
     // validate uniqueness of username & phoneNumber fields
     Useraccount.validatesUniquenessOf("phoneNumber", { message: "Phone Number is not unique." });
     Useraccount.validatesUniquenessOf("username", { message: "User name is not unique." });
+
+    Useraccount.observe('after save', function(ctx, next) {
+
+      if(ctx.instance !== undefined) {
+        let { emailConfirmationId } = Useraccount.app.models;
+        let { Email } = Useraccount.app.models;
+        let cId = uniqueid();
+        let email = ctx.instance.email;
+        let userId = ctx.instance.id;
+        let html = `<p>Hello <b>${ctx.instance.firstName}</b>, Welcome to SolveIT competition. Pleace confirm your email address by following the link below. </p>
+                    <a href="http://localhost:4200/confirm/${userId}-${cId}">confirmation link</a>`
+        emailConfirmationId.create({cId: cId, userId: userId}, function(err, data) {
+          if (err) {
+            next(err);
+            return;
+          }
+          Email.send({
+            to: email,
+            from: 'kal.a.yitbarek@gmail.com',
+            subject: 'Welcome to SolveIT',
+            html: html
+          }, function(err, mail) {
+            if (err) {
+              console.log("Error while sending email ", err);
+              next(err);
+            }
+            console.log('email sent!');
+            next();
+          });
+        })
+      } else {
+        console.log("update");
+      }
+    });
+
+    // check if email is verified before login
+    Useraccount.beforeRemote('login', function (ctx, unused, next) {
+      console.log('loging in');
+      let email = ctx.args.credentials.email;
+      let pass = ctx.args.credentials.password;
+      Useraccount.findOne({where: {email: email}}, function(err, data) {
+        console.log(data);
+        if (err) {
+          next(err);
+        } else {
+          if (data.emailVerified) {
+            next();
+          } else {
+            let error = new Error();
+            next(error);
+          }
+        }
+      });
+    });
 
     // register SolveIT managment members
     Useraccount.registerSolveItMgt = async(firstName, middleName, lastName, email, password, phoneNumber, username) => {
@@ -26,6 +82,7 @@ module.exports = function(Useraccount) {
         user = await Useraccount.create(user);
 
         return user;
+
     }
 
     // register SolveIT teams
@@ -71,6 +128,23 @@ module.exports = function(Useraccount) {
         return user;
     }
 
+    // confirm email address
+    Useraccount.confirmEmail = async(userId, cid, cb) => {
+      let { emailConfirmationId } = Useraccount.app.models;
+      let record = await emailConfirmationId.findOne({ where: {cId: cid}});
+      if (record !== null && userId === record.userId) {
+        Useraccount.updateAll({id: userId}, {emailVerified: true}, function(err, data) {
+          if (err) {
+            console.log("error");
+          }
+          cb(null, true);
+        });
+      } else {
+        let err = new Error();
+        cb(err);
+      }
+    }
+
     Useraccount.deactivateUser = async(userId) => {
         let user = await Useraccount.findOne({ where: { id: userId } });
 
@@ -109,6 +183,98 @@ module.exports = function(Useraccount) {
             cb(null, users);
         });
     }
+
+    Useraccount.exportData = async(selectionOptions, res) => {
+        var workbook = new Excel.Workbook();
+        var sheet = workbook.addWorksheet("report");
+        
+        const { IcogRole } = Useraccount.app.models;
+        const City = Useraccount.app.models.City;
+
+        const role = await IcogRole.findOne({ where: { name: "solve-it-participants" } });
+        
+        var sex = selectionOptions.sex;
+        var educationLevel = selectionOptions.educationLevel;
+        var cities = [];
+        var users = [];
+
+        if (selectionOptions.selectedCity === 0) {
+            cities = await City.find({include: 'Region'});
+        } else {
+            let city = await City.find({where: {id: selectionOptions.selectedCity}, include: 'Region'});
+            cities.push(city);
+        }
+        sheet.columns = [
+            { header: 'Region', key: 'region', width: 10},
+            { header: 'City', key: 'city', width: 10 },
+            { header: 'First Name', key: 'firstName', width: 10},							
+            { header: 'Last Name', key: 'lastName', width: 10},
+            { header: 'Age', key: 'age', width: 10},
+            { header: 'Sex', key: 'sex', width: 10 },							
+            { header: 'Phone Number', key: 'phoneNumber', width: 10}							
+        ];
+
+        if (sex == 'both' && educationLevel == 'none') {
+            for (const city of cities) {
+                users = await Useraccount.find({where: {cityId: city.id}});
+                for (const user of users) {
+                    sheet.addRow({region: city.region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, age: user.age, sex: user.sex, phoneNumber: user.phoneNumber});                    
+                }
+            }
+        }else if(sex == 'both' || educationLevel == 'none') {
+            if (sex == 'both') {
+                for (const city of cities) {
+                    users = await Useraccount.find({where: {cityId: city.id, educationLevel: educationLevel}});
+                    for (const user of users) {
+                        sheet.addRow({region: city.region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, age: user.age, sex: user.sex, phoneNumber: user.phoneNumber});                    
+                    }
+                }
+            }else {
+                for (const city of cities) {
+                    users = await Useraccount.find({where: {cityId: city.id, sex: sex}});
+                    for (const user of users) {
+                        sheet.addRow({region: city.region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, age: user.age, sex: user.sex, phoneNumber: user.phoneNumber});                    
+                    }
+                }
+            }
+        }else {
+            for (const city of cities) {
+                users = await Useraccount.find({where: {cityId: city.id, educationLevel: educationLevel, sex: sex}});
+                for (const user of users) {
+                    sheet.addRow({region: city.region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, age: user.age, sex: user.sex, phoneNumber: user.phoneNumber});                    
+                }
+            }
+        }
+
+        await sendWorkbook(workbook, res);
+    }
+
+    async function sendWorkbook(workbook, response) { 
+        var fileName = 'ExportedData.xlsx';
+    
+        response.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+    
+        await workbook.xlsx.write(response);
+    
+		response.end();
+    }
+
+	Useraccount.remoteMethod("exportData", {
+	    description: "return data.",
+	    accepts: [
+		  { arg: "selectionOptions", type: "object", required: true },
+		  {arg: 'res', type: 'object', 'http': {source: 'res'}}
+	    ],
+	    http: {
+	      verb: "post",
+	      path: "/exportData"
+	    },
+	    returns: {
+	      type: "object",
+	      root: true
+	    }
+	});
 
     Useraccount.remoteMethod(
         'searchUser', {
@@ -197,7 +363,7 @@ module.exports = function(Useraccount) {
     });
 
     Useraccount.remoteMethod("deactivateUser", {
-        desctiption: "Deactivate registered user",
+        description: "Deactivate registered user",
         accepts: { arg: "userId", type: "string", require: true },
         http: {
             verb: "post",
@@ -209,4 +375,19 @@ module.exports = function(Useraccount) {
         }
     });
 
+    Useraccount.remoteMethod("confirmEmail", {
+      description: "Confirm email address",
+      accepts: [
+        { arg: "userId", type: "string", require: true },
+        { arg: "cid", type: "string", require: true}
+      ],
+      http: {
+        verb: "post",
+        path: "/confirmEmail"
+      },
+      returns: {
+        type: "boolean",
+        arg: "result"
+      }
+    });
 };
