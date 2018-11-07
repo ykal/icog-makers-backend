@@ -141,5 +141,9 @@
   "weekTopProject": {
     "dataSource": "db",
     "public": true
+  },
+  "city": {
+    "dataSource": "mongo",
+    "public": true
   }
 }
