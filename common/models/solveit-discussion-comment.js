@@ -27,7 +27,7 @@ module.exports = function(Solveitdiscussioncomment) {
               html: html
             }, function(err3, mail) {
               if (err3) {
-                const err3 = new Errow();
+                const err3 = new Error();
                 next(err3);
               } else {
                 next();
