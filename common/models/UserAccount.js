@@ -199,9 +199,9 @@ module.exports = function(Useraccount) {
         var users = [];
 
         if (selectionOptions.selectedCity === 0) {
-            cities = await City.find({include: 'Region'});
+            cities = await City.find({include: 'region'});
         } else {
-            let city = await City.find({where: {id: selectionOptions.selectedCity}, include: 'Region'});
+            let city = await City.find({where: {id: selectionOptions.selectedCity}, include: 'region'});
             cities.push(city);
         }
         sheet.columns = [
@@ -218,7 +218,7 @@ module.exports = function(Useraccount) {
             for (const city of cities) {
                 users = await Useraccount.find({where: {cityId: city.id}});
                 for (const user of users) {
-                    sheet.addRow({region: city.region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, age: user.age, sex: user.sex, phoneNumber: user.phoneNumber});                    
+                    sheet.addRow({region: JSON.parse(JSON.stringify(city[0])).region.name, city: city[0].name, firstName: user.firstName, lastName: user.lastName, age: user.age, sex: user.sex, phoneNumber: user.phoneNumber});                    
                 }
             }
         }else if(sex == 'both' || educationLevel == 'none') {
@@ -226,14 +226,14 @@ module.exports = function(Useraccount) {
                 for (const city of cities) {
                     users = await Useraccount.find({where: {cityId: city.id, educationLevel: educationLevel}});
                     for (const user of users) {
-                        sheet.addRow({region: city.region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, age: user.age, sex: user.sex, phoneNumber: user.phoneNumber});                    
+                        sheet.addRow({region: JSON.parse(JSON.stringify(city[0])).region.name, city: city[0].name, firstName: user.firstName, lastName: user.lastName, age: user.age, sex: user.sex, phoneNumber: user.phoneNumber});                    
                     }
                 }
             }else {
                 for (const city of cities) {
                     users = await Useraccount.find({where: {cityId: city.id, sex: sex}});
                     for (const user of users) {
-                        sheet.addRow({region: city.region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, age: user.age, sex: user.sex, phoneNumber: user.phoneNumber});                    
+                        sheet.addRow({region: JSON.parse(JSON.stringify(city[0])).region.name, city: city[0].name, firstName: user.firstName, lastName: user.lastName, age: user.age, sex: user.sex, phoneNumber: user.phoneNumber});                    
                     }
                 }
             }
@@ -241,7 +241,7 @@ module.exports = function(Useraccount) {
             for (const city of cities) {
                 users = await Useraccount.find({where: {cityId: city.id, educationLevel: educationLevel, sex: sex}});
                 for (const user of users) {
-                    sheet.addRow({region: city.region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, age: user.age, sex: user.sex, phoneNumber: user.phoneNumber});                    
+                    sheet.addRow({region: JSON.parse(JSON.stringify(city[0])).region.name, city: city[0].name, firstName: user.firstName, lastName: user.lastName, age: user.age, sex: user.sex, phoneNumber: user.phoneNumber});                    
                 }
             }
         }
