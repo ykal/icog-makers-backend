@@ -1,6 +1,7 @@
 'use strict';
 var Excel = require('exceljs');
 let STATUS = require('../configs/config');
+let url = require('../configs/urlConfig');
 const uniqueid = require('uniqid');
 
 module.exports = function(Useraccount) {
@@ -18,7 +19,7 @@ module.exports = function(Useraccount) {
         let email = ctx.instance.email;
         let userId = ctx.instance.id;
         let html = `<p>Hello <b>${ctx.instance.firstName}</b>, Welcome to SolveIT competition. Pleace confirm your email address by following the link below. </p>
-                    <a href="http://localhost:4200/confirm/${userId}-${cId}">confirmation link</a>`
+                    <a href="${url}/confirm/${userId}-${cId}">confirmation link</a>`
         emailConfirmationId.create({cId: cId, userId: userId}, function(err, data) {
           if (err) {
             next(err);
@@ -187,12 +188,12 @@ module.exports = function(Useraccount) {
     Useraccount.exportData = async(selectionOptions, res) => {
         var workbook = new Excel.Workbook();
         var sheet = workbook.addWorksheet("report");
-        
+
         const { IcogRole } = Useraccount.app.models;
         const City = Useraccount.app.models.City;
 
         const role = await IcogRole.findOne({ where: { name: "solve-it-participants" } });
-        
+
         var sex = selectionOptions.sex;
         var educationLevel = selectionOptions.educationLevel;
         var cities = [];
@@ -207,18 +208,18 @@ module.exports = function(Useraccount) {
         sheet.columns = [
             { header: 'Region', key: 'region', width: 10},
             { header: 'City', key: 'city', width: 10 },
-            { header: 'First Name', key: 'firstName', width: 10},							
+            { header: 'First Name', key: 'firstName', width: 10},
             { header: 'Last Name', key: 'lastName', width: 10},
             { header: 'Age', key: 'age', width: 10},
-            { header: 'Sex', key: 'sex', width: 10 },							
-            { header: 'Phone Number', key: 'phoneNumber', width: 10}							
+            { header: 'Sex', key: 'sex', width: 10 },
+            { header: 'Phone Number', key: 'phoneNumber', width: 10}
         ];
 
         if (sex == 'both' && educationLevel == 'none') {
             for (const city of cities) {
                 users = await Useraccount.find({where: {cityId: city.id}});
                 for (const user of users) {
-                    sheet.addRow({region: JSON.parse(JSON.stringify(city[0])).region.name, city: city[0].name, firstName: user.firstName, lastName: user.lastName, age: user.age, sex: user.sex, phoneNumber: user.phoneNumber});                    
+                    sheet.addRow({region: JSON.parse(JSON.stringify(city[0])).region.name, city: city[0].name, firstName: user.firstName, lastName: user.lastName, age: user.age, sex: user.sex, phoneNumber: user.phoneNumber});
                 }
             }
         }else if(sex == 'both' || educationLevel == 'none') {
@@ -226,14 +227,14 @@ module.exports = function(Useraccount) {
                 for (const city of cities) {
                     users = await Useraccount.find({where: {cityId: city.id, educationLevel: educationLevel}});
                     for (const user of users) {
-                        sheet.addRow({region: JSON.parse(JSON.stringify(city[0])).region.name, city: city[0].name, firstName: user.firstName, lastName: user.lastName, age: user.age, sex: user.sex, phoneNumber: user.phoneNumber});                    
+                        sheet.addRow({region: JSON.parse(JSON.stringify(city[0])).region.name, city: city[0].name, firstName: user.firstName, lastName: user.lastName, age: user.age, sex: user.sex, phoneNumber: user.phoneNumber});
                     }
                 }
             }else {
                 for (const city of cities) {
                     users = await Useraccount.find({where: {cityId: city.id, sex: sex}});
                     for (const user of users) {
-                        sheet.addRow({region: JSON.parse(JSON.stringify(city[0])).region.name, city: city[0].name, firstName: user.firstName, lastName: user.lastName, age: user.age, sex: user.sex, phoneNumber: user.phoneNumber});                    
+                        sheet.addRow({region: JSON.parse(JSON.stringify(city[0])).region.name, city: city[0].name, firstName: user.firstName, lastName: user.lastName, age: user.age, sex: user.sex, phoneNumber: user.phoneNumber});
                     }
                 }
             }
@@ -241,7 +242,7 @@ module.exports = function(Useraccount) {
             for (const city of cities) {
                 users = await Useraccount.find({where: {cityId: city.id, educationLevel: educationLevel, sex: sex}});
                 for (const user of users) {
-                    sheet.addRow({region: JSON.parse(JSON.stringify(city[0])).region.name, city: city[0].name, firstName: user.firstName, lastName: user.lastName, age: user.age, sex: user.sex, phoneNumber: user.phoneNumber});                    
+                    sheet.addRow({region: JSON.parse(JSON.stringify(city[0])).region.name, city: city[0].name, firstName: user.firstName, lastName: user.lastName, age: user.age, sex: user.sex, phoneNumber: user.phoneNumber});
                 }
             }
         }
@@ -249,14 +250,14 @@ module.exports = function(Useraccount) {
         await sendWorkbook(workbook, res);
     }
 
-    async function sendWorkbook(workbook, response) { 
+    async function sendWorkbook(workbook, response) {
         var fileName = 'ExportedData.xlsx';
-    
+
         response.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
-    
+
         await workbook.xlsx.write(response);
-    
+
 		response.end();
     }
 

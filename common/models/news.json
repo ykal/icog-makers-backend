@@ -25,7 +25,12 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "user": {
+      "type": "belongsTo",
+      "model": "UserAccount"
+    }
+  },
   "acls": [],
   "methods": {}
 }
