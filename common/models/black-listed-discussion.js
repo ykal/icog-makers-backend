@@ -2,14 +2,13 @@
 
 module.exports = function(Blacklisteddiscussion) {
 
-  Blacklisteddiscussion.removeFromBlackList =  async (userId, discussionId) => {
-    let res = Blacklisteddiscussion.destroyAll({userId: userId, discussionId: discussionId});
+  Blacklisteddiscussion.removeFromBlackList =  async (discussionId) => {
+    let res = Blacklisteddiscussion.destroyAll({discussionId: discussionId});
     return res;
   }
 
   Blacklisteddiscussion.remoteMethod('removeFromBlackList', {
     accepts: [
-      {arg: "userId", type: "string", required: true},
       {arg: "discussionId", type: "string", required: true},
     ],
     http: {
