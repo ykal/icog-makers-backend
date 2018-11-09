@@ -80,10 +80,10 @@
       "model": "Icog-Role",
       "foreignKey": "roleId"
     },
-    "region": {
+    "city": {
       "type": "belongsTo",
-      "model": "Region",
-      "foreignKey": "regionId"
+      "model": "city",
+      "foreignKey": "cityId"
     },
     "solveIT-discussions": {
       "type": "hasMany",
