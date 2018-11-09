@@ -1,4 +1,5 @@
 'use strict';
+let url = require('../configs/urlConfig');
 
 module.exports = function(Solveitdiscussioncomment) {
 
@@ -19,7 +20,7 @@ module.exports = function(Solveitdiscussioncomment) {
           } else {
             const commenter = discussion.user.username === user.username ? 'you' : user.username;
             const html = `<p>Hey <b>${reciverFirstName}</b>, <em>${commenter}</em> commented on your discussion.</p>
-                         <a href="http://localhost:4200/discussions/${discussion.slung}">check it here.</a>`;
+                         <a href="${url}/discussions/${discussion.slung}">check it here.</a>`;
             Email.send({
               to: reciverEmail,
               from: 'kal.a.yitbarek@gmail.com',

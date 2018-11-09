@@ -1,6 +1,7 @@
 'use strict';
 var Excel = require('exceljs');
 let STATUS = require('../configs/config');
+let url = require('../configs/urlConfig');
 const uniqueid = require('uniqid');
 
 module.exports = function(Useraccount) {
@@ -18,7 +19,7 @@ module.exports = function(Useraccount) {
         let email = ctx.instance.email;
         let userId = ctx.instance.id;
         let html = `<p>Hello <b>${ctx.instance.firstName}</b>, Welcome to SolveIT competition. Pleace confirm your email address by following the link below. </p>
-                    <a href="http://localhost:4200/confirm/${userId}-${cId}">confirmation link</a>`
+                    <a href="${url}/confirm/${userId}-${cId}">confirmation link</a>`
         emailConfirmationId.create({cId: cId, userId: userId}, function(err, data) {
           if (err) {
             next(err);
