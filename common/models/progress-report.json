@@ -31,6 +31,11 @@
       "type": "hasMany",
       "model": "progressComment",
       "foreignKey": "reportId"
+    },
+    "user": {
+      "type": "belongsTo",
+      "model": "UserAccount",
+      "foriegnKey": "userId"
     }
   },
   "acls": [],
