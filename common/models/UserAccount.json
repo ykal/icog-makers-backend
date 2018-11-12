@@ -71,6 +71,11 @@
       "type": "string",
       "required": false,
       "default": "None"
+    },
+    "isModerator": {
+      "type":"boolean",
+      "required": true,
+      "default": false
     }
   },
   "validations": [],
