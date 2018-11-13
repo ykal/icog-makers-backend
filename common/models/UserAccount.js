@@ -4,7 +4,7 @@ let STATUS = require("../configs/config");
 let url = require("../configs/urlConfig");
 const uniqueid = require("uniqid");
 
-module.exports = function(Useraccount) {
+module.exports = function (Useraccount) {
   // validate uniqueness of username & phoneNumber fields
   Useraccount.validatesUniquenessOf("phoneNumber", {
     message: "Phone Number is not unique."
@@ -13,10 +13,14 @@ module.exports = function(Useraccount) {
     message: "User name is not unique."
   });
 
-  Useraccount.observe("after save", function(ctx, next) {
-    if (ctx.instance !== undefined) {
-      let { emailConfirmationId } = Useraccount.app.models;
-      let { Email } = Useraccount.app.models;
+  Useraccount.observe("after save", function (ctx, next) {
+    if (ctx.instance !== undefined && !ctx.instance.emailVerified) {
+      let {
+        emailConfirmationId
+      } = Useraccount.app.models;
+      let {
+        Email
+      } = Useraccount.app.models;
       let cId = uniqueid();
       let email = ctx.instance.email;
       let userId = ctx.instance.id;
@@ -24,7 +28,10 @@ module.exports = function(Useraccount) {
         ctx.instance.firstName
       }</b>, Welcome to SolveIT competition. Pleace confirm your email address by following the link below. </p>
                     <a href="${url}/confirm/${userId}-${cId}">confirmation link</a>`;
-      emailConfirmationId.create({ cId: cId, userId: userId }, function(
+      emailConfirmationId.create({
+        cId: cId,
+        userId: userId
+      }, function (
         err,
         data
       ) {
@@ -32,14 +39,13 @@ module.exports = function(Useraccount) {
           next(err);
           return;
         }
-        Email.send(
-          {
+        Email.send({
             to: email,
             from: "kal.a.yitbarek@gmail.com",
             subject: "Welcome to SolveIT",
             html: html
           },
-          function(err, mail) {
+          function (err, mail) {
             if (err) {
               console.log("Error while sending email ", err);
               next(err);
@@ -50,15 +56,19 @@ module.exports = function(Useraccount) {
         );
       });
     } else {
-      console.log("update");
+      next();
     }
   });
 
   // check if email is verified before login
-  Useraccount.beforeRemote("login", function(ctx, unused, next) {
+  Useraccount.beforeRemote("login", function (ctx, unused, next) {
     let email = ctx.args.credentials.email;
     let pass = ctx.args.credentials.password;
-    Useraccount.findOne({ where: { email: email } }, function(err, data) {
+    Useraccount.findOne({
+      where: {
+        email: email
+      }
+    }, function (err, data) {
       if (err) {
         next(err);
       } else if (data !== null) {
@@ -85,8 +95,14 @@ module.exports = function(Useraccount) {
     phoneNumber,
     username
   ) => {
-    let { IcogRole } = Useraccount.app.models;
-    let userRole = await IcogRole.findOne({ where: { name: "solve-it-mgt" } });
+    let {
+      IcogRole
+    } = Useraccount.app.models;
+    let userRole = await IcogRole.findOne({
+      where: {
+        name: "solve-it-mgt"
+      }
+    });
     let user = {
       firstName: firstName,
       middleName: middleName,
@@ -114,8 +130,14 @@ module.exports = function(Useraccount) {
     phoneNumber,
     username
   ) => {
-    let { IcogRole } = Useraccount.app.models;
-    let userRole = await IcogRole.findOne({ where: { name: "solve-it-team" } });
+    let {
+      IcogRole
+    } = Useraccount.app.models;
+    let userRole = await IcogRole.findOne({
+      where: {
+        name: "solve-it-team"
+      }
+    });
 
     let user = {
       firstName: firstName,
@@ -136,9 +158,13 @@ module.exports = function(Useraccount) {
 
   // register SolveIT participants
   Useraccount.registerParticipants = async user => {
-    let { IcogRole } = Useraccount.app.models;
+    let {
+      IcogRole
+    } = Useraccount.app.models;
     let userRole = await IcogRole.findOne({
-      where: { name: "solve-it-participants" }
+      where: {
+        name: "solve-it-participants"
+      }
     });
 
     user["roleId"] = userRole.id;
@@ -151,7 +177,11 @@ module.exports = function(Useraccount) {
 
   // activate registered user
   Useraccount.activateUser = async userId => {
-    let user = await Useraccount.findOne({ where: { id: userId } });
+    let user = await Useraccount.findOne({
+      where: {
+        id: userId
+      }
+    });
 
     let updatedUser = await user.updateAttribute("status", STATUS[1]);
     return user;
@@ -159,10 +189,20 @@ module.exports = function(Useraccount) {
 
   // confirm email address
   Useraccount.confirmEmail = async (userId, cid, cb) => {
-    let { emailConfirmationId } = Useraccount.app.models;
-    let record = await emailConfirmationId.findOne({ where: { cId: cid } });
+    let {
+      emailConfirmationId
+    } = Useraccount.app.models;
+    let record = await emailConfirmationId.findOne({
+      where: {
+        cId: cid
+      }
+    });
     if (record !== null && userId === record.userId) {
-      Useraccount.updateAll({ id: userId }, { emailVerified: true }, function(
+      Useraccount.updateAll({
+        id: userId
+      }, {
+        emailVerified: true
+      }, function (
         err,
         data
       ) {
@@ -178,41 +218,158 @@ module.exports = function(Useraccount) {
   };
 
   Useraccount.deactivateUser = async userId => {
-    let user = await Useraccount.findOne({ where: { id: userId } });
+    let user = await Useraccount.findOne({
+      where: {
+        id: userId
+      }
+    });
 
     let updatedUser = await user.updateAttribute("status", STATUS[0]);
     return user;
   };
 
-  Useraccount.searchUser = function(keyword, cb) {
+  Useraccount.searchUserByEmail = function (email, cb) {
+    var pattern = new RegExp('.*' + email + '.*', "i");
+    Useraccount.findOne({
+      where: {
+        email: {
+          like: pattern
+        }
+      }
+    }, function (err, data) {
+      if (err) {
+        cb(new Error("Error while searching user"));
+      } else {
+        cb(null, data);
+      }
+    });
+  }
+
+  Useraccount.requestPasswordChange = function (email, cb) {
+    var pattern = new RegExp('.*' + email + '.*', "i");
+    Useraccount.findOne({
+      where: {
+        email: {
+          like: pattern
+        }
+      }
+    }, function (err, data) {
+      if (err) {
+        cb(new Error("Error while searching user"));
+      } else {
+        if (data !== null) {
+          let {
+            forgotPasswordRequest
+          } = Useraccount.app.models;
+          const requestId = uniqueid();
+          forgotPasswordRequest.create({
+            id: requestId,
+            userId: data.id
+          }, function (err, res) {
+            if (err) {
+              cb(new Error("Error while creating forgot password request recored."), {
+                sucess: false,
+                error: 'recored'
+              })
+            } else {
+              //  Email
+              let {
+                Email
+              } = Useraccount.app.models;
+              let email = data.email;
+              let userId = data.id;
+              let html = `<p> <b>${
+                data.firstName
+              }</b>, You have request to change your account password. Please follow the given link.</p>
+                            <a href="${url}/changePassword/${userId}-${requestId}">password change confirmation link.</a>`;
+
+              Email.send({
+                  to: email,
+                  from: "kal.a.yitbarek@gmail.com",
+                  subject: "Confirmation for password change",
+                  html: html
+                },
+                function (err, mail) {
+                  if (err) {
+                    console.log("Error while sending email ", err);
+                    cb(new Error("Error while sending email."), {
+                      sucess: false,
+                      error: 'email'
+                    });
+                  }
+                  console.log("email sent!");
+                  cb(null, {
+                    sucess: true,
+                    error: null
+                  });
+                }
+              );
+            }
+          })
+        } else {
+          cb({
+            sucess: false,
+            error: 'notFound'
+          })
+        }
+      }
+    });
+  }
+
+  Useraccount.searchUser = function (keyword, cb) {
     let pattern = new RegExp(
       ".*" + keyword + ".*",
       "i"
     ); /* case-insensitive RegExp search */
     if (keyword.trim() !== "") {
-      let { IcogRole } = Useraccount.app.models;
-      IcogRole.findOne({ where: { name: "solve-it-participants" } }, function(
+      let {
+        IcogRole
+      } = Useraccount.app.models;
+      IcogRole.findOne({
+        where: {
+          name: "solve-it-participants"
+        }
+      }, function (
         err,
         role
       ) {
-        Useraccount.find(
-          {
+        Useraccount.find({
             where: {
-              and: [
-                { roleId: role.id },
+              and: [{
+                  roleId: role.id
+                },
                 {
-                  or: [
-                    { email: { like: pattern } },
-                    { firstName: { like: pattern } },
-                    { middleName: { like: pattern } },
-                    { lastName: { like: pattern } },
-                    { username: { like: pattern } }
+                  or: [{
+                      email: {
+                        like: pattern
+                      }
+                    },
+                    {
+                      firstName: {
+                        like: pattern
+                      }
+                    },
+                    {
+                      middleName: {
+                        like: pattern
+                      }
+                    },
+                    {
+                      lastName: {
+                        like: pattern
+                      }
+                    },
+                    {
+                      username: {
+                        like: pattern
+                      }
+                    }
                   ]
                 }
               ]
             }
           },
-          function(err, users) {
+          function (err, users) {
             cb(null, users);
           }
         );
@@ -222,8 +379,12 @@ module.exports = function(Useraccount) {
     }
   };
 
-  Useraccount.getUserListByRole = function(roleId, cb) {
-    Useraccount.find({ where: { roleId: roleId } }, function(err, users) {
+  Useraccount.getUserListByRole = function (roleId, cb) {
+    Useraccount.find({
+      where: {
+        roleId: roleId
+      }
+    }, function (err, users) {
       cb(null, users);
     });
   };
@@ -232,11 +393,15 @@ module.exports = function(Useraccount) {
     var workbook = new Excel.Workbook();
     var sheet = workbook.addWorksheet("report");
 
-    const { IcogRole } = Useraccount.app.models;
+    const {
+      IcogRole
+    } = Useraccount.app.models;
     const City = Useraccount.app.models.City;
 
     const role = await IcogRole.findOne({
-      where: { name: "solve-it-participants" }
+      where: {
+        name: "solve-it-participants"
+      }
     });
 
     var sex = selectionOptions.sex;
@@ -245,26 +410,57 @@ module.exports = function(Useraccount) {
     var users = [];
 
     if (selectionOptions.selectedCity === 0) {
-      cities = await City.find({ include: "region" });
+      cities = await City.find({
+        include: "region"
+      });
     } else {
       let city = await City.find({
-        where: { id: selectionOptions.selectedCity },
+        where: {
+          id: selectionOptions.selectedCity
+        },
         include: "region"
       });
       cities.push(city);
     }
-    sheet.columns = [
-      { header: "Region", key: "region", width: 10 },
-      { header: "City", key: "city", width: 10 },
-      { header: "First Name", key: "firstName", width: 10 },
-      { header: "Last Name", key: "lastName", width: 10 },
-      { header: "Gender", key: "sex", width: 10 },
-      { header: "Phone Number", key: "phoneNumber", width: 10 }
+    sheet.columns = [{
+        header: "Region",
+        key: "region",
+        width: 10
+      },
+      {
+        header: "City",
+        key: "city",
+        width: 10
+      },
+      {
+        header: "First Name",
+        key: "firstName",
+        width: 10
+      },
+      {
+        header: "Last Name",
+        key: "lastName",
+        width: 10
+      },
+      {
+        header: "Gender",
+        key: "sex",
+        width: 10
+      },
+      {
+        header: "Phone Number",
+        key: "phoneNumber",
+        width: 10
+      }
     ];
 
     if (sex == "both" && educationLevel == "none") {
       for (const city of cities) {
-        users = await Useraccount.find({ where: { cityId: city.id } });
+        users = await Useraccount.find({
+          where: {
+            cityId: city.id
+          }
+        });
         for (const user of users) {
           sheet.addRow({
             region: JSON.parse(JSON.stringify(city[0])).region.name,
@@ -280,7 +476,10 @@ module.exports = function(Useraccount) {
       if (sex == "both") {
         for (const city of cities) {
           users = await Useraccount.find({
-            where: { cityId: city.id, educationLevel: educationLevel }
+            where: {
+              cityId: city.id,
+              educationLevel: educationLevel
+            }
           });
           for (const user of users) {
             sheet.addRow({
@@ -296,7 +495,10 @@ module.exports = function(Useraccount) {
       } else {
         for (const city of cities) {
           users = await Useraccount.find({
-            where: { cityId: city.id, gender: sex }
+            where: {
+              cityId: city.id,
+              gender: sex
+            }
           });
           for (const user of users) {
             sheet.addRow({
@@ -354,9 +556,18 @@ module.exports = function(Useraccount) {
 
   Useraccount.remoteMethod("exportData", {
     description: "return data.",
-    accepts: [
-      { arg: "selectionOptions", type: "object", required: true },
-      { arg: "res", type: "object", http: { source: "res" } }
+    accepts: [{
+        arg: "selectionOptions",
+        type: "object",
+        required: true
+      },
+      {
+        arg: "res",
+        type: "object",
+        http: {
+          source: "res"
+        }
+      }
     ],
     http: {
       verb: "post",
@@ -369,27 +580,88 @@ module.exports = function(Useraccount) {
   });
 
   Useraccount.remoteMethod("searchUser", {
-    http: { path: "/search/:keyword", verb: "get" },
-    accepts: { arg: "keyword", type: "string" },
-    returns: { arg: "Result", type: "Object" }
+    http: {
+      path: "/search/:keyword",
+      verb: "get"
+    },
+    accepts: {
+      arg: "keyword",
+      type: "string"
+    },
+    returns: {
+      arg: "Result",
+      type: "Object"
+    }
   });
 
   Useraccount.remoteMethod("getUserListByRole", {
-    http: { path: "/role/:roleId/users", verb: "get" },
-    accepts: { arg: "roleId", type: "string" },
-    returns: { arg: "Result", type: "Object" }
+    http: {
+      path: "/role/:roleId/users",
+      verb: "get"
+    },
+    accepts: {
+      arg: "roleId",
+      type: "string"
+    },
+    returns: {
+      arg: "Result",
+      type: "Object"
+    }
+  });
+
+  Useraccount.remoteMethod("requestPasswordChange", {
+    http: {
+      path: "/request-password-change",
+      verb: "post"
+    },
+    accepts: {
+      arg: "email",
+      type: "string",
+      required: true
+    },
+    returns: {
+      arg: "result",
+      type: "object"
+    }
   });
 
   Useraccount.remoteMethod("registerSolveItMgt", {
     desctiption: "Register SolveIT managment users",
-    accepts: [
-      { arg: "firstName", type: "string", required: true },
-      { arg: "middleName", type: "string", required: true },
-      { arg: "lastName", type: "string", required: true },
-      { arg: "email", type: "string", required: true },
-      { arg: "password", type: "string", required: true },
-      { arg: "phoneNumber", type: "string", required: true },
-      { arg: "username", type: "string", require: true }
+    accepts: [{
+        arg: "firstName",
+        type: "string",
+        required: true
+      },
+      {
+        arg: "middleName",
+        type: "string",
+        required: true
+      },
+      {
+        arg: "lastName",
+        type: "string",
+        required: true
+      },
+      {
+        arg: "email",
+        type: "string",
+        required: true
+      },
+      {
+        arg: "password",
+        type: "string",
+        required: true
+      },
+      {
+        arg: "phoneNumber",
+        type: "string",
+        required: true
+      },
+      {
+        arg: "username",
+        type: "string",
+        require: true
+      }
     ],
     http: {
       verb: "post",
@@ -403,14 +675,41 @@ module.exports = function(Useraccount) {
 
   Useraccount.remoteMethod("registerSolveItTeam", {
     desctiption: "Register SolveIT teams.",
-    accepts: [
-      { arg: "firstName", type: "string", required: true },
-      { arg: "middleName", type: "string", required: true },
-      { arg: "lastName", type: "string", required: true },
-      { arg: "email", type: "string", required: true },
-      { arg: "password", type: "string", required: true },
-      { arg: "phoneNumber", type: "string", required: true },
-      { arg: "username", type: "string", require: true }
+    accepts: [{
+        arg: "firstName",
+        type: "string",
+        required: true
+      },
+      {
+        arg: "middleName",
+        type: "string",
+        required: true
+      },
+      {
+        arg: "lastName",
+        type: "string",
+        required: true
+      },
+      {
+        arg: "email",
+        type: "string",
+        required: true
+      },
+      {
+        arg: "password",
+        type: "string",
+        required: true
+      },
+      {
+        arg: "phoneNumber",
+        type: "string",
+        required: true
+      },
+      {
+        arg: "username",
+        type: "string",
+        require: true
+      }
     ],
     http: {
       verb: "post",
@@ -424,7 +723,11 @@ module.exports = function(Useraccount) {
 
   Useraccount.remoteMethod("registerParticipants", {
     desctiption: "Register SolveIT teams.",
-    accepts: [{ arg: "user", type: "object", required: true }],
+    accepts: [{
+      arg: "user",
+      type: "object",
+      required: true
+    }],
     http: {
       verb: "post",
       path: "/register-participants"
@@ -437,7 +740,11 @@ module.exports = function(Useraccount) {
 
   Useraccount.remoteMethod("activateUser", {
     desctiption: "Activate registered user",
-    accepts: { arg: "userId", type: "string", require: true },
+    accepts: {
+      arg: "userId",
+      type: "string",
+      require: true
+    },
     http: {
       verb: "post",
       path: "/activate-user"
@@ -448,9 +755,31 @@ module.exports = function(Useraccount) {
     }
   });
 
+  Useraccount.remoteMethod("searchUserByEmail", {
+    desctiption: "Search user by email",
+    accepts: {
+      arg: "email",
+      type: "string",
+      require: true
+    },
+    http: {
+      verb: "get",
+      path: "/:email"
+    },
+    returns: {
+      type: "object",
+      root: true,
+      arg: 'user'
+    }
+  });
+
   Useraccount.remoteMethod("deactivateUser", {
     description: "Deactivate registered user",
-    accepts: { arg: "userId", type: "string", require: true },
+    accepts: {
+      arg: "userId",
+      type: "string",
+      require: true
+    },
     http: {
       verb: "post",
       path: "/deactivate-user"
@@ -463,9 +792,16 @@ module.exports = function(Useraccount) {
 
   Useraccount.remoteMethod("confirmEmail", {
     description: "Confirm email address",
-    accepts: [
-      { arg: "userId", type: "string", require: true },
-      { arg: "cid", type: "string", require: true }
+    accepts: [{
+        arg: "userId",
+        type: "string",
+        require: true
+      },
+      {
+        arg: "cid",
+        type: "string",
+        require: true
+      }
     ],
     http: {
       verb: "post",

@@ -145,5 +145,9 @@
   "city": {
     "dataSource": "mongo",
     "public": true
+  },
+  "forgotPasswordRequest": {
+    "dataSource": "mongo",
+    "public": false
   }
 }

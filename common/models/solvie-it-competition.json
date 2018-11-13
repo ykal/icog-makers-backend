@@ -21,7 +21,9 @@
       "defaultFn": "now"
     },
     "cities": {
-      "type": ["string"],
+      "type": [
+        "string"
+      ],
       "required": true
     }
   },
