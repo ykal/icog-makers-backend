@@ -135,11 +135,11 @@
     "public": true
   },
   "competitionWinner": {
-    "dataSource": "db",
+    "dataSource": "mongo",
     "public": true
   },
   "weekTopProject": {
-    "dataSource": "db",
+    "dataSource": "mongo",
     "public": true
   },
   "city": {
