@@ -228,23 +228,6 @@ module.exports = function (Useraccount) {
     return user;
   };
 
-  Useraccount.searchUserByEmail = function (email, cb) {
-    var pattern = new RegExp('.*' + email + '.*', "i");
-    Useraccount.findOne({
-      where: {
-        email: {
-          like: pattern
-        }
-      }
-    }, function (err, data) {
-      if (err) {
-        cb(new Error("Error while searching user"));
-      } else {
-        cb(null, data);
-      }
-    });
-  }
-
   Useraccount.requestPasswordChange = function (email, cb) {
     var pattern = new RegExp('.*' + email + '.*', "i");
     Useraccount.findOne({
@@ -752,24 +735,6 @@ module.exports = function (Useraccount) {
     returns: {
       type: "object",
       root: true
-    }
-  });
-
-  Useraccount.remoteMethod("searchUserByEmail", {
-    desctiption: "Search user by email",
-    accepts: {
-      arg: "email",
-      type: "string",
-      require: true
-    },
-    http: {
-      verb: "get",
-      path: "/:email"
-    },
-    returns: {
-      type: "object",
-      root: true,
-      arg: 'user'
     }
   });
 
