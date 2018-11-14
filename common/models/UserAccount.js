@@ -5,6 +5,7 @@ let url = require("../configs/urlConfig");
 const uniqueid = require("uniqid");
 
 module.exports = function (Useraccount) {
+
   // validate uniqueness of username & phoneNumber fields
   Useraccount.validatesUniquenessOf("phoneNumber", {
     message: "Phone Number is not unique."
@@ -59,6 +60,66 @@ module.exports = function (Useraccount) {
       next();
     }
   });
+
+
+
+  Useraccount.changePassword = function (key, cb) {
+    let {
+      forgotPasswordRequest
+    } = Useraccount.app.models;
+    console.log(key);
+    const ids = key.split(",");
+    const cid = ids[1];
+    console.log(cid)
+    forgotPasswordRequest.findOne({
+      where: {
+        id: cid
+      }
+    }, function (err, data) {
+      if (err) {
+        cb(new Error('Error while checking request'));
+        return;
+      }
+
+      if (data && !data.inactive && data.userId === ids[0]) {
+        forgotPasswordRequest.updateAll({
+          id: ids[1]
+        }, {
+          inactive: true
+        }, function (err, response) {
+          console.log("update", response);
+          if (err) {
+            console.log("error while updating");
+            cb(err);
+            return;
+          }
+          cb(null, true);
+        })
+      } else {
+        cb(null, false);
+      }
+    })
+  }
+
+  Useraccount.remoteMethod("changePassword", {
+    desctiption: "request password change",
+    accepts: {
+      arg: "key",
+      type: "string",
+      require: true
+    },
+    http: {
+      verb: "post",
+      path: "/change-password"
+    },
+    returns: {
+      type: "object",
+      root: true,
+      arg: "success"
+    }
+  });
+
+
 
   // check if email is verified before login
   Useraccount.beforeRemote("login", function (ctx, unused, next) {
@@ -188,33 +249,44 @@ module.exports = function (Useraccount) {
   };
 
   // confirm email address
-  Useraccount.confirmEmail = async (userId, cid, cb) => {
+  Useraccount.confirmEmail = function (userId, cid, cb) {
     let {
       emailConfirmationId
     } = Useraccount.app.models;
-    let record = await emailConfirmationId.findOne({
+    emailConfirmationId.findOne({
       where: {
         cId: cid
       }
+    }, function (err, record) {
+      if (record !== null && userId === record.userId) {
+        console.log("record ", record);
+        Useraccount.updateAll({
+          id: userId
+        }, {
+          emailVerified: true
+        }, function (
+          err,
+          data
+        ) {
+          if (err) {
+            console.log("error");
+            cb(err);
+            return;
+          } else {
+            console.log("updated ", data);
+            cb(null, true);
+            return;
+          }
+          console.log("after updated")
+        });
+      } else {
+        console.log("final error");
+        let err = new Error();
+        cb(err);
+        return;
+      }
     });
-    if (record !== null && userId === record.userId) {
-      Useraccount.updateAll({
-        id: userId
-      }, {
-        emailVerified: true
-      }, function (
-        err,
-        data
-      ) {
-        if (err) {
-          console.log("error");
-        }
-        cb(null, true);
-      });
-    } else {
-      let err = new Error();
-      cb(err);
-    }
+
   };
 
   Useraccount.deactivateUser = async userId => {
@@ -264,7 +336,7 @@ module.exports = function (Useraccount) {
               let html = `<p> <b>${
                 data.firstName
               }</b>, You have request to change your account password. Please follow the given link.</p>
-                            <a href="${url}/changePassword/${userId}-${requestId}">password change confirmation link.</a>`;
+                            <a href="${url}/change-password/${userId}-${requestId}">password change confirmation link.</a>`;
 
               Email.send({
                   to: email,
@@ -297,6 +369,37 @@ module.exports = function (Useraccount) {
         }
       }
     });
+  }
+
+  Useraccount.updatePassword = function (id, password, cb) {
+    const buildError = (code, error) => {
+      const err = new Error(error);
+      err.statusCode = 400;
+      err.code = code;
+      return err;
+    };
+
+    Useraccount.findOne({
+      where: {
+        id: id
+      }
+    }, function (err, user) {
+      if (err) {
+        cb(buildError('INVALID_OPERATION', 'unable to find user.'));
+        return;
+      }
+      user.updateAttribute('password', password, function (err, user) {
+        if (err) {
+          cb(buildError('INVALID_OPERATION', err));
+          return;
+        }
+
+        // successful,
+        // notify that everything is OK!
+        cb(null, true);
+      });
+
+    })
   }
 
   Useraccount.searchUser = function (keyword, cb) {
@@ -718,6 +821,28 @@ module.exports = function (Useraccount) {
     returns: {
       type: "object",
       root: true
+    }
+  });
+
+  Useraccount.remoteMethod("updatePassword", {
+    desctiption: "update user password.",
+    accepts: [{
+      arg: "id",
+      type: "string",
+      required: true
+    }, {
+      arg: "password",
+      type: "string",
+      required: true
+    }],
+    http: {
+      verb: "post",
+      path: "/update-password"
+    },
+    returns: {
+      type: "object",
+      root: true,
+      arg: "success"
     }
   });
 
