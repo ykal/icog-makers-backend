@@ -43,7 +43,7 @@
       "required": "true",
       "default": "None"
     },
-    "birthDay": {
+    "birthDate": {
       "type": "date",
       "required": "true",
       "default": "None"
@@ -125,13 +125,11 @@
       "foreignKey": "userId"
     }
   },
-  "acls": [
-    {
-      "accessType": "*",
-      "principalType": "ROLE",
-      "principalId": "$unauthenticated",
-      "permission": "ALLOW"
-    }
-  ],
+  "acls": [{
+    "accessType": "*",
+    "principalType": "ROLE",
+    "principalId": "$unauthenticated",
+    "permission": "ALLOW"
+  }],
   "methods": {}
 }
