@@ -6,14 +6,6 @@ const uniqueid = require("uniqid");
 
 module.exports = function (Useraccount) {
 
-  // validate uniqueness of username & phoneNumber fields
-  Useraccount.validatesUniquenessOf("phoneNumber", {
-    message: "Phone Number is not unique."
-  });
-  Useraccount.validatesUniquenessOf("username", {
-    message: "User name is not unique."
-  });
-
   Useraccount.observe("after save", function (ctx, next) {
     if (ctx.instance !== undefined && !ctx.instance.emailVerified) {
       let {
@@ -61,8 +53,7 @@ module.exports = function (Useraccount) {
     }
   });
 
-
-
+  // check password  request change is correct
   Useraccount.changePassword = function (key, cb) {
     let {
       forgotPasswordRequest
@@ -118,8 +109,6 @@ module.exports = function (Useraccount) {
       arg: "success"
     }
   });
-
-
 
   // check if email is verified before login
   Useraccount.beforeRemote("login", function (ctx, unused, next) {
@@ -300,6 +289,7 @@ module.exports = function (Useraccount) {
     return user;
   };
 
+  // request password change
   Useraccount.requestPasswordChange = function (email, cb) {
     var pattern = new RegExp('.*' + email + '.*', "i");
     Useraccount.findOne({
@@ -371,6 +361,7 @@ module.exports = function (Useraccount) {
     });
   }
 
+  // reset password
   Useraccount.updatePassword = function (id, password, cb) {
     const buildError = (code, error) => {
       const err = new Error(error);
@@ -402,6 +393,28 @@ module.exports = function (Useraccount) {
     })
   }
 
+  // chek if email is unique
+  Useraccount.isEmailUnique = function (email, cb) {
+    Useraccount.findOne({
+      where: {
+        email: email
+      }
+    }, function (err, user) {
+      if (err) {
+        cb(err)
+        return;
+      }
+      if (user === null) {
+        cb(null, true);
+        return
+      } else {
+        cb(null, false);
+        return;
+      }
+    })
+  }
+
+  // search password
   Useraccount.searchUser = function (keyword, cb) {
     let pattern = new RegExp(
       ".*" + keyword + ".*",
@@ -465,6 +478,7 @@ module.exports = function (Useraccount) {
     }
   };
 
+  // get users by role
   Useraccount.getUserListByRole = function (roleId, cb) {
     Useraccount.find({
       where: {
@@ -475,225 +489,81 @@ module.exports = function (Useraccount) {
     });
   };
 
-  Useraccount.exportData = async (selectionOptions, res) => {
+  // export user data
+  Useraccount.exportData = async(selectionOptions, res) => {
     var workbook = new Excel.Workbook();
     var sheet = workbook.addWorksheet("report");
 
-    const {
-      IcogRole
-    } = Useraccount.app.models;
+    const { IcogRole } = Useraccount.app.models;
     const City = Useraccount.app.models.City;
 
-    const role = await IcogRole.findOne({
-      where: {
-        name: "solve-it-participants"
-      }
-    });
+    const role = await IcogRole.findOne({ where: { name: "solve-it-participants" } });
 
     var sex = selectionOptions.sex;
     var educationLevel = selectionOptions.educationLevel;
     var cities = [];
     var users = [];
 
-    if (selectionOptions.selectedCity === 0) {
-      cities = await City.find({
-        include: "region"
-      });
+    if (selectionOptions.selectedCity.toString() === "0") {
+        cities = await City.find({include: 'region'});
     } else {
-      let city = await City.find({
-        where: {
-          id: selectionOptions.selectedCity
-        },
-        include: "region"
-      });
-      cities.push(city);
+        let city = await City.findOne({where: {id: selectionOptions.selectedCity}, include: 'region'});
+        cities.push(city);
     }
-    sheet.columns = [{
-        header: "Region",
-        key: "region",
-        width: 10
-      },
-      {
-        header: "City",
-        key: "city",
-        width: 10
-      },
-      {
-        header: "First Name",
-        key: "firstName",
-        width: 10
-      },
-      {
-        header: "Last Name",
-        key: "lastName",
-        width: 10
-      },
-      {
-        header: "Gender",
-        key: "sex",
-        width: 10
-      },
-      {
-        header: "Phone Number",
-        key: "phoneNumber",
-        width: 10
-      }
+    sheet.columns = [
+        { header: 'Region', key: 'region', width: 10},
+        { header: 'City', key: 'city', width: 10 },
+        { header: 'First Name', key: 'firstName', width: 10},
+        { header: 'Last Name', key: 'lastName', width: 10},
+        { header: 'Gender', key: 'sex', width: 10 },
+        { header: 'Phone Number', key: 'phoneNumber', width: 10}
     ];
 
-    if (sex == "both" && educationLevel == "none") {
-      for (const city of cities) {
-        users = await Useraccount.find({
-          where: {
-            cityId: city.id
-          }
-        });
-        for (const user of users) {
-          sheet.addRow({
-            region: JSON.parse(JSON.stringify(city[0])).region.name,
-            city: city[0].name,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            sex: user.gender,
-            phoneNumber: user.phoneNumber
-          });
-        }
-      }
-    } else if (sex == "both" || educationLevel == "none") {
-      if (sex == "both") {
+    if (sex == 'both' && educationLevel == 'none') {
         for (const city of cities) {
-          users = await Useraccount.find({
-            where: {
-              cityId: city.id,
-              educationLevel: educationLevel
+            users = await Useraccount.find({where: {cityId: city.id}});
+            for (const user of users) {
+                sheet.addRow({region: JSON.parse(JSON.stringify(city)).region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, sex: user.gender, phoneNumber: user.phoneNumber});
             }
-          });
-          for (const user of users) {
-            sheet.addRow({
-              region: JSON.parse(JSON.stringify(city[0])).region.name,
-              city: city[0].name,
-              firstName: user.firstName,
-              lastName: user.lastName,
-              sex: user.gender,
-              phoneNumber: user.phoneNumber
-            });
-          }
         }
-      } else {
-        for (const city of cities) {
-          users = await Useraccount.find({
-            where: {
-              cityId: city.id,
-              gender: sex
-            }
-          });
-          for (const user of users) {
-            sheet.addRow({
-              region: JSON.parse(JSON.stringify(city[0])).region.name,
-              city: city[0].name,
-              firstName: user.firstName,
-              lastName: user.lastName,
-              sex: user.gender,
-              phoneNumber: user.phoneNumber
-            });
-          }
-        }
-      }
-    } else {
-      for (const city of cities) {
-        users = await Useraccount.find({
-          where: {
-            cityId: city.id,
-            educationLevel: educationLevel,
-            gender: sex
-          }
-        });
-        for (const user of users) {
-          sheet.addRow({
-            region: JSON.parse(JSON.stringify(city[0])).region.name,
-            city: city[0].name,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            sex: user.gender,
-            phoneNumber: user.phoneNumber
-          });
-        }
-      }
-    }
-
-    Useraccount.exportData = async(selectionOptions, res) => {
-        var workbook = new Excel.Workbook();
-        var sheet = workbook.addWorksheet("report");
-        
-        const { IcogRole } = Useraccount.app.models;
-        const City = Useraccount.app.models.City;
-
-        const role = await IcogRole.findOne({ where: { name: "solve-it-participants" } });
-        
-        var sex = selectionOptions.sex;
-        var educationLevel = selectionOptions.educationLevel;
-        var cities = [];
-        var users = [];
-
-        if (selectionOptions.selectedCity === 0) {
-            cities = await City.find({include: 'Region'});
-        } else {
-            let city = await City.find({where: {id: selectionOptions.selectedCity}, include: 'Region'});
-            cities.push(city);
-        }
-        sheet.columns = [
-            { header: 'Region', key: 'region', width: 10},
-            { header: 'City', key: 'city', width: 10 },
-            { header: 'First Name', key: 'firstName', width: 10},							
-            { header: 'Last Name', key: 'lastName', width: 10},
-            { header: 'Age', key: 'age', width: 10},
-            { header: 'Sex', key: 'sex', width: 10 },							
-            { header: 'Phone Number', key: 'phoneNumber', width: 10}							
-        ];
-
-        if (sex == 'both' && educationLevel == 'none') {
+    }else if(sex == 'both' || educationLevel == 'none') {
+        if (sex == 'both') {
             for (const city of cities) {
-                users = await Useraccount.find({where: {cityId: city.id}});
+                users = await Useraccount.find({where: {cityId: city.id, educationLevel: educationLevel}});
                 for (const user of users) {
-                    sheet.addRow({region: city.region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, age: user.age, sex: user.sex, phoneNumber: user.phoneNumber});                    
-                }
-            }
-        }else if(sex == 'both' || educationLevel == 'none') {
-            if (sex == 'both') {
-                for (const city of cities) {
-                    users = await Useraccount.find({where: {cityId: city.id, educationLevel: educationLevel}});
-                    for (const user of users) {
-                        sheet.addRow({region: city.region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, age: user.age, sex: user.sex, phoneNumber: user.phoneNumber});                    
-                    }
-                }
-            }else {
-                for (const city of cities) {
-                    users = await Useraccount.find({where: {cityId: city.id, sex: sex}});
-                    for (const user of users) {
-                        sheet.addRow({region: city.region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, age: user.age, sex: user.sex, phoneNumber: user.phoneNumber});                    
-                    }
+                    sheet.addRow({region: JSON.parse(JSON.stringify(city)).region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, sex: user.gender, phoneNumber: user.phoneNumber});
                 }
             }
         }else {
             for (const city of cities) {
-                users = await Useraccount.find({where: {cityId: city.id, educationLevel: educationLevel, sex: sex}});
+                users = await Useraccount.find({where: {cityId: city.id, gender: sex}});
                 for (const user of users) {
-                    sheet.addRow({region: city.region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, age: user.age, sex: user.sex, phoneNumber: user.phoneNumber});                    
+                    sheet.addRow({region: JSON.parse(JSON.stringify(city)).region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, sex: user.gender, phoneNumber: user.phoneNumber});
                 }
             }
         }
+    }else {
+        for (const city of cities) {
+            users = await Useraccount.find({where: {cityId: city.id, educationLevel: educationLevel, gender: sex}});
+            for (const user of users) {
+                sheet.addRow({region: JSON.parse(JSON.stringify(city)).region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, sex: user.gender, phoneNumber: user.phoneNumber});
+            }
+        }
+    }
+    await sendWorkbook(workbook, res);
+}
 
-    response.end();
+  async function sendWorkbook(workbook, response) {
+      var fileName = 'ExportedData.xlsx';
+
+      response.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+
+      await workbook.xlsx.write(response);
+
+  response.end();
   }
 
-    async function sendWorkbook(workbook, response) { 
-        var fileName = 'ExportedData.xlsx';
-    
-        response.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
-    
-        await workbook.xlsx.write(response);
-    
-		response.end();
   Useraccount.remoteMethod("exportData", {
     description: "return data.",
     accepts: [{
@@ -954,6 +824,23 @@ module.exports = function (Useraccount) {
     returns: {
       type: "boolean",
       arg: "result"
+    }
+  });
+
+  Useraccount.remoteMethod("isEmailUnique", {
+    http: {
+      path: "/is-email-unique",
+      verb: "post"
+    },
+    accepts: {
+      arg: "email",
+      type: "string",
+      require: true
+    },
+    returns: {
+      arg: "result",
+      type: "Object",
+      root: true
     }
   });
 };
