@@ -25,12 +25,12 @@
     "transports": [
       {
         "type": "SMTP",
-        "host": "smtp.gmail.com",
+        "host": "52jx-5625.accessdomain.com",
         "secure": true,
         "port": 465,
         "auth": {
-          "user": "kal.a.yitbarek@gmail.com",
-          "pass": "Kalzbest1"
+          "user": "email@icog-labs.com",
+          "pass": "eO*-P2k5}gd"
         }
       }
     ]

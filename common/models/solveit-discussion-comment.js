@@ -23,7 +23,7 @@ module.exports = function(Solveitdiscussioncomment) {
                          <a href="${url}/discussions/${discussion.slung}">check it here.</a>`;
             Email.send({
               to: reciverEmail,
-              from: 'kal.a.yitbarek@gmail.com',
+              from: 'email@icog-labs.com',
               subject: 'New comment on your discussion',
               html: html
             }, function(err3, mail) {

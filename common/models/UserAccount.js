@@ -34,7 +34,7 @@ module.exports = function (Useraccount) {
         }
         Email.send({
             to: email,
-            from: "kal.a.yitbarek@gmail.com",
+            from: "email@icog-labs.com",
             subject: "Welcome to SolveIT",
             html: html
           },
@@ -330,7 +330,7 @@ module.exports = function (Useraccount) {
 
               Email.send({
                   to: email,
-                  from: "kal.a.yitbarek@gmail.com",
+                  from: "email@icog-labs.com",
                   subject: "Confirmation for password change",
                   html: html
                 },
@@ -827,7 +827,7 @@ module.exports = function (Useraccount) {
     }
   });
 
-  Useraccount.remoteMethod("isEmailUnique", {
+   Useraccount.remoteMethod("isEmailUnique", {
     http: {
       path: "/is-email-unique",
       verb: "post"
