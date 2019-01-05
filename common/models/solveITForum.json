@@ -27,6 +27,11 @@
       "type": "number",
       "required": true,
       "default": 0
+    },
+    "description": {
+      "type": "string",
+      "required": "false",
+      "default": "Post discussions that have related topics to this forum."
     }
   },
   "validations": [],
