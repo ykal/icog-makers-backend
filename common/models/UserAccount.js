@@ -5,7 +5,7 @@ let url = require("../configs/urlConfig");
 const uniqueid = require("uniqid");
 
 module.exports = function (Useraccount) {
-
+  delete Useraccount.validations.username;
   Useraccount.observe("after save", function (ctx, next) {
     if (ctx.instance !== undefined && !ctx.instance.emailVerified) {
       let {
