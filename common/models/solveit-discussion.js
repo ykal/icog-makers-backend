@@ -2,6 +2,11 @@
 
 module.exports = function (Solveitdiscussion) {
 
+  //  disable delete end point
+  Solveitdiscussion.disableRemoteMethod("deleteById", true);
+  Solveitdiscussion.disableRemoteMethod("destroyById", true);
+  Solveitdiscussion.disableRemoteMethod("removeById", true);
+
   Solveitdiscussion.getBySlung = function (slung, cb) {
     Solveitdiscussion.findOne({
       where: {

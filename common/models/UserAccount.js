@@ -5,7 +5,15 @@ let url = require("../configs/urlConfig");
 const uniqueid = require("uniqid");
 
 module.exports = function (Useraccount) {
+  
+  // remove username validation
   delete Useraccount.validations.username;
+
+  //  disable delete end point
+  Useraccount.disableRemoteMethod("deleteById", true);
+  Useraccount.disableRemoteMethod("destroyById", true);
+  Useraccount.disableRemoteMethod("removeById", true);
+
   Useraccount.observe("after save", function (ctx, next) {
     if (ctx.instance !== undefined && !ctx.instance.emailVerified) {
       let {

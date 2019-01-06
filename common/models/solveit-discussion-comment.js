@@ -3,6 +3,11 @@ let url = require('../configs/urlConfig');
 
 module.exports = function(Solveitdiscussioncomment) {
 
+//  disable delete end point
+Solveitdiscussioncomment.disableRemoteMethod("deleteById", true);
+Solveitdiscussioncomment.disableRemoteMethod("destroyById", true);
+Solveitdiscussioncomment.disableRemoteMethod("removeById", true);  
+
   Solveitdiscussioncomment.observe('after save', function(ctx, next) {
     let { Email, Solveitdiscussion, UserAccount } = Solveitdiscussioncomment.app.models;
     Solveitdiscussion.findOne({where: {id: ctx.instance.discussionId}, include: "user"}, function(err, data) {
