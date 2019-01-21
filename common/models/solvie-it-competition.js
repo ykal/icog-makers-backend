@@ -15,7 +15,6 @@ module.exports = function(Solvieitcompetition) {
 
   Solvieitcompetition.getCompetitionProjectsWithCity = async (competitionId) => {
 	const { ProjectMember, CompetitionProject } = Solvieitcompetition.app.models;
-	console.log(CompetitionProject);
 
     let competitionProjects = await CompetitionProject.find({where: {competitionId: competitionId},  include: ["solveitproject"]});
 
@@ -23,11 +22,13 @@ module.exports = function(Solvieitcompetition) {
         const element = competitionProjects[i];
         let members = await ProjectMember.find({where: {projectId: element.projectId}, include: ["userAccount"]});
         members.forEach(member => {
-            if (element["cities"]) {
-                element["cities"] = element["cities"].concat(member.userAccount().cityId);
-              } else {
-                  element["cities"] = [member.userAccount().cityId];
-              }
+            if (member.userAccount()) {
+                if (element["cities"]) {
+                    element["cities"] = element["cities"].concat(member.userAccount().cityId);
+                  } else {
+                      element["cities"] = [member.userAccount().cityId];
+                  }
+            }
         })
         
     }
