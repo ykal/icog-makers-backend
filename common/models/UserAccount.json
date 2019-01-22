@@ -45,7 +45,6 @@
     },
     "birthDate": {
       "type": "date",
-      "required": "true",
       "default": "None"
     },
     "educationLevel": {
