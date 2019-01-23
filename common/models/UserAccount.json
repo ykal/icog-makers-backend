@@ -281,8 +281,6 @@
       "permission": "ALLOW",
       "property": "__get__blackListed"
     }
-
-
   ],
   "methods": {}
 }

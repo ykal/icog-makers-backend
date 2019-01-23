@@ -572,6 +572,14 @@ module.exports = function (Useraccount) {
   response.end();
   }
 
+  Useraccount.getAssignedCities = function (id, cb) {
+    const { AssignedCity } = Useraccount.app.models;
+    AssignedCity.find({where: {userId: id}}, (error, data) => {
+      if (error) cb(new Error("Error while fetching assigned cities"));
+      cb(null, data);
+    });
+  }
+
   Useraccount.remoteMethod("exportData", {
     description: "return data.",
     accepts: [{
@@ -842,6 +850,23 @@ module.exports = function (Useraccount) {
     },
     accepts: {
       arg: "email",
+      type: "string",
+      require: true
+    },
+    returns: {
+      arg: "result",
+      type: "Object",
+      root: true
+    }
+  });
+
+  Useraccount.remoteMethod("getAssignedCities", {
+    http: {
+      path: "/:id/get-assigned-cities",
+      verb: "get"
+    },
+    accepts: {
+      arg: "id",
       type: "string",
       require: true
     },
