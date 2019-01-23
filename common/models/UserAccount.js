@@ -423,28 +423,20 @@ module.exports = function (Useraccount) {
   }
 
   // search password
-  Useraccount.searchUser = function (keyword, cb) {
+  Useraccount.searchUser = function (keyword, userId, cb) {
     let pattern = new RegExp(
       ".*" + keyword + ".*",
       "i"
     ); /* case-insensitive RegExp search */
     if (keyword.trim() !== "") {
-      let {
-        IcogRole
-      } = Useraccount.app.models;
-      IcogRole.findOne({
-        where: {
-          name: "solve-it-participants"
-        }
-      }, function (
-        err,
-        role
-      ) {
-        Useraccount.find({
+
+      Useraccount.find({where: {id: userId}, include: ['role']}, (error, user) => {
+        if (error) cb(new Error('Error while fetching user.'));
+        if (user.length > 0) {
+         if (user[0].role().name === 'admin' ||user[0].role().name === 'solve-it-mgt') {
+          Useraccount.find({
             where: {
-              and: [{
-                  roleId: role.id
-                },
+              and: [
                 {
                   or: [{
                       email: {
@@ -480,6 +472,61 @@ module.exports = function (Useraccount) {
             cb(null, users);
           }
         );
+         } else {
+          let {
+            IcogRole
+          } = Useraccount.app.models;
+          IcogRole.findOne({
+            where: {
+              or: [{name: "solve-it-team"}, {name: "solve-it-participants"}]
+            }
+          }, function (
+            err,
+            role
+          ) {
+            Useraccount.find({
+                where: {
+                  and: [{
+                      roleId: role.id
+                    },
+                    {
+                      or: [{
+                          email: {
+                            like: pattern
+                          }
+                        },
+                        {
+                          firstName: {
+                            like: pattern
+                          }
+                        },
+                        {
+                          middleName: {
+                            like: pattern
+                          }
+                        },
+                        {
+                          lastName: {
+                            like: pattern
+                          }
+                        },
+                        {
+                          username: {
+                            like: pattern
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              },
+              function (err, users) {
+                cb(null, users);
+              }
+            );
+          });
+         }
+        }
       });
     } else {
       cb(null, []);
@@ -607,13 +654,19 @@ module.exports = function (Useraccount) {
 
   Useraccount.remoteMethod("searchUser", {
     http: {
-      path: "/search/:keyword",
+      path: "/search/:keyword/:id",
       verb: "get"
     },
-    accepts: {
-      arg: "keyword",
-      type: "string"
-    },
+    accepts: [
+      {
+        arg: "keyword",
+        type: "string"
+      },
+      {
+        arg: "userId",
+        type: "string"
+      }
+    ],
     returns: {
       arg: "Result",
       type: "Object"
