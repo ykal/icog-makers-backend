@@ -7,7 +7,8 @@
     "name": "storage",
     "connector": "loopback-component-storage",
     "provider": "filesystem",
-    "root": "./files"
+    "root": "./files",
+    "maxFileSize": "1004857600"
   },
   "mongo": {
     "host": "",
