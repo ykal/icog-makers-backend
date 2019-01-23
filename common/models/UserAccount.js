@@ -227,6 +227,8 @@ module.exports = function (Useraccount) {
 
     user["roleId"] = userRole.id;
     user["created"] = new Date().toISOString();
+    user["password"] = user.password + "";
+    user["phoneNumber"] = user.phoneNumber + "";
 
     user = await Useraccount.create(user);
 
