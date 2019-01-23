@@ -1,1 +1,1 @@
-module.exports = frontendUrl = "http://localhost:4200";
+module.exports = frontendUrl = "https://icog-solveit.com";
