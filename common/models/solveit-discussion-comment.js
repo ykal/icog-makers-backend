@@ -25,7 +25,7 @@ Solveitdiscussioncomment.disableRemoteMethod("removeById", true);
           } else {
             const commenter = discussion.user.username === user.username ? 'you' : user.username;
             const html = `<p>Hey <b>${reciverFirstName}</b>, <em>${commenter}</em> commented on your discussion.</p>
-                         <a href="${url}/discussions/${discussion.slung}">check it here.</a>`;
+                         <a href="${url}/forums/discussions/${discussion.slung}">check it here.</a>`;
             Email.send({
               to: reciverEmail,
               from: 'email@icog-labs.com',
