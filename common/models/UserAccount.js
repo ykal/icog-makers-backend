@@ -571,6 +571,7 @@ module.exports = function (Useraccount) {
         { header: 'Region', key: 'region', width: 10},
         { header: 'City', key: 'city', width: 10 },
         { header: 'First Name', key: 'firstName', width: 10},
+        { header: 'Middle Name', key: 'middleName', width: 10},
         { header: 'Last Name', key: 'lastName', width: 10},
         { header: 'Gender', key: 'sex', width: 10 },
         { header: 'Phone Number', key: 'phoneNumber', width: 10},
@@ -583,7 +584,7 @@ module.exports = function (Useraccount) {
         for (const city of cities) {
             users = await Useraccount.find({where: {cityId: city.id}});
             for (const user of users) {
-                sheet.addRow({region: JSON.parse(JSON.stringify(city)).region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, sex: user.gender, phoneNumber: user.phoneNumber, educationLevel: user.educationLevel, workStatus: user.workStatus, birthDate: user.birthDate.toString().substr(0,10)});
+                sheet.addRow({region: JSON.parse(JSON.stringify(city)).region.name, city: city.name, firstName: user.firstName, middleName: user.middleName, lastName: user.lastName, sex: user.gender, phoneNumber: user.phoneNumber, educationLevel: user.educationLevel, workStatus: user.workStatus, birthDate: user.birthDate.toString().substr(0,10)});
             }
         }
     }else if(sex == 'both' || educationLevel == 'none') {
@@ -591,14 +592,14 @@ module.exports = function (Useraccount) {
             for (const city of cities) {
                 users = await Useraccount.find({where: {cityId: city.id, educationLevel: educationLevel}});
                 for (const user of users) {
-                    sheet.addRow({region: JSON.parse(JSON.stringify(city)).region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, sex: user.gender, phoneNumber: user.phoneNumber, educationLevel: user.educationLevel, workStatus: user.workStatus, birthDate: user.birthDate.toString().substr(0,10)});
+                    sheet.addRow({region: JSON.parse(JSON.stringify(city)).region.name, city: city.name, firstName: user.firstName, middleName: user.middleName, lastName: user.lastName, sex: user.gender, phoneNumber: user.phoneNumber, educationLevel: user.educationLevel, workStatus: user.workStatus, birthDate: user.birthDate.toString().substr(0,10)});
                 }
             }
         }else {
             for (const city of cities) {
                 users = await Useraccount.find({where: {cityId: city.id, gender: sex}});
                 for (const user of users) {
-                    sheet.addRow({region: JSON.parse(JSON.stringify(city)).region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, sex: user.gender, phoneNumber: user.phoneNumber, educationLevel: user.educationLevel, workStatus: user.workStatus, birthDate: user.birthDate.toString().substr(0,10)});
+                    sheet.addRow({region: JSON.parse(JSON.stringify(city)).region.name, city: city.name, firstName: user.firstName, middleName: user.middleName, lastName: user.lastName, sex: user.gender, phoneNumber: user.phoneNumber, educationLevel: user.educationLevel, workStatus: user.workStatus, birthDate: user.birthDate.toString().substr(0,10)});
                 }
             }
         }
@@ -606,7 +607,7 @@ module.exports = function (Useraccount) {
         for (const city of cities) {
             users = await Useraccount.find({where: {cityId: city.id, educationLevel: educationLevel, gender: sex}});
             for (const user of users) {
-                sheet.addRow({region: JSON.parse(JSON.stringify(city)).region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, sex: user.gender, phoneNumber: user.phoneNumber, educationLevel: user.educationLevel, workStatus: user.workStatus, birthDate: user.birthDate.toString().substr(0,10)});
+                sheet.addRow({region: JSON.parse(JSON.stringify(city)).region.name, city: city.name, firstName: user.firstName, middleName: user.middleName, lastName: user.lastName, sex: user.gender, phoneNumber: user.phoneNumber, educationLevel: user.educationLevel, workStatus: user.workStatus, birthDate: user.birthDate.toString().substr(0,10)});
             }
         }
     }
