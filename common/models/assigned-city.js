@@ -3,7 +3,7 @@
 module.exports = function(Assignedcity) {
 
     Assignedcity.assign = function (data, cb) {
-        Assignedcity.find({were: {userId: data.userId}}, (error, res) => {
+        Assignedcity.find({where: {userId: data.userId}}, (error, res) => {
             if (error) cb(new Error('Error while assigning cities.'));
             if (res.length > 0) {
                 Assignedcity.updateAll({id: res[0].id}, {cities: data.cities}, (err, res1) => {
