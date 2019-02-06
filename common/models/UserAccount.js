@@ -583,7 +583,7 @@ module.exports = function (Useraccount) {
         for (const city of cities) {
             users = await Useraccount.find({where: {cityId: city.id}});
             for (const user of users) {
-                sheet.addRow({region: JSON.parse(JSON.stringify(city)).region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, sex: user.gender, phoneNumber: user.phoneNumber, educationLevel: user.educationLevel, workStatus: user.workStatus, birthDate: user.birthDate.substr(0,10)});
+                sheet.addRow({region: JSON.parse(JSON.stringify(city)).region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, sex: user.gender, phoneNumber: user.phoneNumber, educationLevel: user.educationLevel, workStatus: user.workStatus, birthDate: user.birthDate.toString().substr(0,10)});
             }
         }
     }else if(sex == 'both' || educationLevel == 'none') {
@@ -591,14 +591,14 @@ module.exports = function (Useraccount) {
             for (const city of cities) {
                 users = await Useraccount.find({where: {cityId: city.id, educationLevel: educationLevel}});
                 for (const user of users) {
-                    sheet.addRow({region: JSON.parse(JSON.stringify(city)).region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, sex: user.gender, phoneNumber: user.phoneNumber, educationLevel: user.educationLevel, workStatus: user.workStatus, birthDate: user.birthDate.substr(0,10)});
+                    sheet.addRow({region: JSON.parse(JSON.stringify(city)).region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, sex: user.gender, phoneNumber: user.phoneNumber, educationLevel: user.educationLevel, workStatus: user.workStatus, birthDate: user.birthDate.toString().substr(0,10)});
                 }
             }
         }else {
             for (const city of cities) {
                 users = await Useraccount.find({where: {cityId: city.id, gender: sex}});
                 for (const user of users) {
-                    sheet.addRow({region: JSON.parse(JSON.stringify(city)).region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, sex: user.gender, phoneNumber: user.phoneNumber, educationLevel: user.educationLevel, workStatus: user.workStatus, birthDate: user.birthDate.substr(0,10)});
+                    sheet.addRow({region: JSON.parse(JSON.stringify(city)).region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, sex: user.gender, phoneNumber: user.phoneNumber, educationLevel: user.educationLevel, workStatus: user.workStatus, birthDate: user.birthDate.toString().substr(0,10)});
                 }
             }
         }
@@ -606,7 +606,7 @@ module.exports = function (Useraccount) {
         for (const city of cities) {
             users = await Useraccount.find({where: {cityId: city.id, educationLevel: educationLevel, gender: sex}});
             for (const user of users) {
-                sheet.addRow({region: JSON.parse(JSON.stringify(city)).region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, sex: user.gender, phoneNumber: user.phoneNumber, educationLevel: user.educationLevel, workStatus: user.workStatus, birthDate: user.birthDate.substr(0,10)});
+                sheet.addRow({region: JSON.parse(JSON.stringify(city)).region.name, city: city.name, firstName: user.firstName, lastName: user.lastName, sex: user.gender, phoneNumber: user.phoneNumber, educationLevel: user.educationLevel, workStatus: user.workStatus, birthDate: user.birthDate.toString().substr(0,10)});
             }
         }
     }
