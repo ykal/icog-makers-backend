@@ -130,7 +130,7 @@ module.exports = function (Useraccount) {
       if (err) {
         next(err);
       } else if (data !== null) {
-        if (data.emailVerified) {
+        if (data.emailVerified &&  data.status === "ACTIVE") {
           next();
         } else {
           let error = new Error();
@@ -237,13 +237,13 @@ module.exports = function (Useraccount) {
 
   // activate registered user
   Useraccount.activateUser = async userId => {
-    let user = await Useraccount.findOne({
-      where: {
+    let user = await Useraccount.updateAll(
+      {
         id: userId
-      }
-    });
+      },
+      {"status": STATUS[1]}
+    );
 
-    let updatedUser = await user.updateAttribute("status", STATUS[1]);
     return user;
   };
 
@@ -289,13 +289,13 @@ module.exports = function (Useraccount) {
   };
 
   Useraccount.deactivateUser = async userId => {
-    let user = await Useraccount.findOne({
-      where: {
+    let user = await Useraccount.updateAll(
+      {
         id: userId
-      }
-    });
+      },
+      {"status": STATUS[0]}
+    );
 
-    let updatedUser = await user.updateAttribute("status", STATUS[0]);
     return user;
   };
 
