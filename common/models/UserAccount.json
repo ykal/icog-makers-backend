@@ -75,6 +75,10 @@
       "type": "boolean",
       "required": true,
       "default": false
+    },
+    "facebookId": {
+      "type": "string",
+      "required": false
     }
   },
   "validations": [],
@@ -210,6 +214,13 @@
       "principalId": "$everyone",
       "permission": "ALLOW",
       "property": "searchUser"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "signInWithFB"
     },
     {
       "accessType": "EXECUTE",
