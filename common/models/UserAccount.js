@@ -9,9 +9,9 @@ module.exports = function(Useraccount) {
   delete Useraccount.validations.username;
 
   //  disable delete end point
-  // Useraccount.disableRemoteMethod('deleteById', true);
-  // Useraccount.disableRemoteMethod('destroyById', true);
-  // Useraccount.disableRemoteMethod('removeById', true);
+  Useraccount.disableRemoteMethod('deleteById', true);
+  Useraccount.disableRemoteMethod('destroyById', true);
+  Useraccount.disableRemoteMethod('removeById', true);
 
   Useraccount.observe('after save', function(ctx, next) {
     if (ctx.instance !== undefined && !ctx.instance.emailVerified) {
