@@ -447,6 +447,7 @@ module.exports = function(Useraccount) {
       '.*' + keyword + '.*',
       'i'
     ); /* case-insensitive RegExp search */
+    console.log(keyword);
     if (keyword.trim() !== '') {
       Useraccount.find(
         {where: {id: userId}, include: ['role']},
@@ -485,6 +486,11 @@ module.exports = function(Useraccount) {
                           },
                           {
                             username: {
+                              like: pattern,
+                            },
+                          },
+                          {
+                            phoneNumber: {
                               like: pattern,
                             },
                           },
@@ -540,6 +546,11 @@ module.exports = function(Useraccount) {
                               },
                               {
                                 username: {
+                                  like: pattern,
+                                },
+                              },
+                              {
+                                phoneNumber: {
                                   like: pattern,
                                 },
                               },
