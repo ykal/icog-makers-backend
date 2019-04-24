@@ -443,12 +443,19 @@ module.exports = function(Useraccount) {
 
   // search password
   Useraccount.searchUser = function(keyword, userId, cb) {
+    let trimedKeyword = keyword.trim();
+    if (
+      trimedKeyword.startsWith('+2519') ||
+      trimedKeyword.startsWith('2519') ||
+      trimedKeyword.startsWith('09')
+    ) {
+      trimedKeyword = trimedKeyword.slice(trimedKeyword.indexOf('9'));
+    }
     let pattern = new RegExp(
-      '.*' + keyword + '.*',
+      '.*' + trimedKeyword + '.*',
       'i'
     ); /* case-insensitive RegExp search */
-    console.log(keyword);
-    if (keyword.trim() !== '') {
+    if (trimedKeyword !== '') {
       Useraccount.find(
         {where: {id: userId}, include: ['role']},
         (error, user) => {
