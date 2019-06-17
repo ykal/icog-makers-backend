@@ -632,6 +632,8 @@ module.exports = function(Useraccount) {
       {header: 'Education Level', key: 'educationLevel', width: 10},
       {header: 'Work Status', key: 'workStatus', width: 10},
       {header: 'Birthdate', key: 'birthDate', width: 10},
+      {header: 'Emergency Name', key: 'emergencyName', width: 10},
+      {header: 'Emergency Contact', key: 'emergencyContact', width: 10},
     ];
 
     if (sex == 'both' && educationLevel == 'none') {
@@ -649,6 +651,8 @@ module.exports = function(Useraccount) {
             educationLevel: user.educationLevel,
             workStatus: user.workStatus,
             birthDate: user.birthDate.toString().substr(0, 10),
+            emergencyName: user.address.emergencyContact.fullName,
+            emergencyContact: user.address.emergencyContact.phoneNumber,
           });
         }
       }
@@ -670,6 +674,8 @@ module.exports = function(Useraccount) {
               educationLevel: user.educationLevel,
               workStatus: user.workStatus,
               birthDate: user.birthDate.toString().substr(0, 10),
+              emergencyName: user.address.emergencyContact.fullName,
+              emergencyContact: user.address.emergencyContact.phoneNumber,
             });
           }
         }
@@ -690,6 +696,8 @@ module.exports = function(Useraccount) {
               educationLevel: user.educationLevel,
               workStatus: user.workStatus,
               birthDate: user.birthDate.toString().substr(0, 10),
+              emergencyName: user.address.emergencyContact.fullName,
+              emergencyContact: user.address.emergencyContact.phoneNumber,
             });
           }
         }
@@ -711,6 +719,8 @@ module.exports = function(Useraccount) {
             educationLevel: user.educationLevel,
             workStatus: user.workStatus,
             birthDate: user.birthDate.toString().substr(0, 10),
+            emergencyName: user.address.emergencyContact.fullName,
+            emergencyContact: user.address.emergencyContact.phoneNumber,
           });
         }
       }
