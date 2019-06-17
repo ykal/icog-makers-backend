@@ -6,10 +6,13 @@
     "validateUpsert": true
   },
   "properties": {
-    "active": {
-      "type": "boolean",
-      "required": true,
-      "default": true
+    "city": {
+      "type": "string",
+      "required": true
+    },
+    "thumbinal": {
+      "type": "object",
+      "required": true
     }
   },
   "validations": [],
@@ -18,6 +21,11 @@
       "type": "belongsTo",
       "model": "Solveitproject",
       "foreignKey": "projectId"
+    },
+    "cityModel": {
+      "type": "belongsTo",
+      "model": "city",
+      "foreignKey": "city"
     },
     "competition": {
       "type": "belongsTo",
