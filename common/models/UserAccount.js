@@ -147,6 +147,25 @@ module.exports = function(Useraccount) {
     );
   });
 
+  // TODO: send user info and role
+  Useraccount.afterRemote('login', (ctx, output, next) => {
+    Useraccount.findOne(
+      {where: {id: output.userId}, include: ['role']},
+      (err, user) => {
+        if (err) next(err);
+        // output['user'] = user.toJSON();
+        ctx.result = {
+          ttl: output.ttl,
+          userId: output.userId,
+          created: output.created,
+          id: output.id,
+          user: user.toJSON(),
+        };
+        next();
+      }
+    );
+  });
+
   // register SolveIT managment members
   Useraccount.registerSolveItMgt = async (
     firstName,
