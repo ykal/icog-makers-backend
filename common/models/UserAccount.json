@@ -88,10 +88,9 @@
       "model": "Icog-Role",
       "foreignKey": "roleId"
     },
-    "city": {
+    "university": {
       "type": "belongsTo",
-      "model": "city",
-      "foreignKey": "cityId"
+      "model": "university"
     },
     "solveIT-discussions": {
       "type": "hasMany",
