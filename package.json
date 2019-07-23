@@ -1,5 +1,5 @@
 {
-  "name": "SolveIT-backend",
+  "name": "makers-backend",
   "version": "1.0.0",
   "main": "server/server.js",
   "engines": {
