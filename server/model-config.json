@@ -153,5 +153,9 @@
   "AssignedCity": {
     "dataSource": "mongo",
     "public": true
+  },
+  "university": {
+    "dataSource": "mongo",
+    "public": true
   }
 }
