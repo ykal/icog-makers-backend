@@ -10,6 +10,9 @@
       "type": "string",
       "required": true
     },
+    "thumbinal": {
+      "type": "object"
+    },
     "slung": {
       "type": "string",
       "required": true

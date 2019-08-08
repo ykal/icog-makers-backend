@@ -22,7 +22,6 @@
     },
     "lastName": {
       "type": "string",
-      "required": true,
       "default": "None"
     },
     "phoneNumber": {
@@ -35,7 +34,6 @@
     },
     "status": {
       "type": "string",
-      "required": true,
       "default": "ACTIVE"
     },
     "gender": {
@@ -49,17 +47,14 @@
     },
     "educationLevel": {
       "type": "string",
-      "required": "true",
       "default": "None"
     },
     "workStatus": {
       "type": "string",
-      "required": "true",
       "default": "None"
     },
     "address": {
       "type": "object",
-      "required": "true",
       "default": "None"
     },
     "emailVerified": {
@@ -290,6 +285,13 @@
       "principalId": "$owner",
       "permission": "ALLOW",
       "property": "__get__blackListed"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "getUserInfo"
     }
   ],
   "methods": {}

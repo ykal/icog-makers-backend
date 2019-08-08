@@ -34,22 +34,23 @@ module.exports = function(Useraccount) {
             next(err);
             return;
           }
-          Email.send(
-            {
-              to: email,
-              from: 'email@icog-labs.com',
-              subject: 'Welcome to SolveIT',
-              html: html,
-            },
-            function(err, mail) {
-              if (err) {
-                console.log('Error while sending email ', err);
-                next(err);
-              }
-              console.log('email sent!');
-              next();
-            }
-          );
+          next();
+          // Email.send(
+          //   {
+          //     to: email,
+          //     from: 'email@icog-labs.com',
+          //     subject: 'Welcome to SolveIT',
+          //     html: html,
+          //   },
+          //   function(err, mail) {
+          //     if (err) {
+          //       console.log('Error while sending email ', err);
+          //       next(err);
+          //     }
+          //     console.log('email sent!');
+          //     next();
+          //   }
+          // );
         }
       );
     } else {
@@ -614,6 +615,22 @@ module.exports = function(Useraccount) {
     );
   };
 
+  Useraccount.getUserInfo = async userId => {
+    const user = await Useraccount.findOne({
+      where: {id: userId},
+      include: ['university'],
+    });
+
+    return {
+      username: user.username,
+      firstName: user.firstName,
+      middleName: user.middleName,
+      email: user.email,
+      university: user.university,
+      gender: user.gender,
+    };
+  };
+
   // export user data
   Useraccount.exportData = async (selectionOptions, res) => {
     var workbook = new Excel.Workbook();
@@ -816,6 +833,23 @@ module.exports = function(Useraccount) {
     returns: {
       arg: 'Result',
       type: 'Object',
+    },
+  });
+
+  Useraccount.remoteMethod('getUserInfo', {
+    http: {
+      path: '/getUserInfo/:userId',
+      verb: 'get',
+    },
+    accepts: [
+      {
+        arg: 'userId',
+        type: 'string',
+      },
+    ],
+    returns: {
+      arg: 'Result',
+      type: 'object',
     },
   });
 
