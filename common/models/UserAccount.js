@@ -4,7 +4,7 @@ let STATUS = require('../configs/config');
 let url = require('../configs/urlConfig');
 const uniqueid = require('uniqid');
 
-module.exports = function(Useraccount) {
+module.exports = function (Useraccount) {
   // remove username validation
   delete Useraccount.validations.username;
 
@@ -13,23 +13,23 @@ module.exports = function(Useraccount) {
   Useraccount.disableRemoteMethod('destroyById', true);
   Useraccount.disableRemoteMethod('removeById', true);
 
-  Useraccount.observe('after save', function(ctx, next) {
+  Useraccount.observe('after save', function (ctx, next) {
     if (ctx.instance !== undefined && !ctx.instance.emailVerified) {
-      let {emailConfirmationId} = Useraccount.app.models;
-      let {Email} = Useraccount.app.models;
+      let { emailConfirmationId } = Useraccount.app.models;
+      let { Email } = Useraccount.app.models;
       let cId = uniqueid();
       let email = ctx.instance.email;
       let userId = ctx.instance.id;
       let html = `<p>Hello <b>${
         ctx.instance.firstName
-      }</b>, Welcome to SolveIT competition. Pleace confirm your email address by following the link below. </p>
+        }</b>, Welcome to SolveIT competition. Pleace confirm your email address by following the link below. </p>
                     <a href="${url}/confirm/${userId}-${cId}">confirmation link</a>`;
       emailConfirmationId.create(
         {
           cId: cId,
           userId: userId,
         },
-        function(err, data) {
+        function (err, data) {
           if (err) {
             next(err);
             return;
@@ -59,8 +59,8 @@ module.exports = function(Useraccount) {
   });
 
   // check password  request change is correct
-  Useraccount.changePassword = function(key, cb) {
-    let {forgotPasswordRequest} = Useraccount.app.models;
+  Useraccount.changePassword = function (key, cb) {
+    let { forgotPasswordRequest } = Useraccount.app.models;
     console.log(key);
     const ids = key.split(',');
     const cid = ids[1];
@@ -71,7 +71,7 @@ module.exports = function(Useraccount) {
           id: cid,
         },
       },
-      function(err, data) {
+      function (err, data) {
         if (err) {
           cb(new Error('Error while checking request'));
           return;
@@ -85,7 +85,7 @@ module.exports = function(Useraccount) {
             {
               inactive: true,
             },
-            function(err, response) {
+            function (err, response) {
               console.log('update', response);
               if (err) {
                 console.log('error while updating');
@@ -121,7 +121,7 @@ module.exports = function(Useraccount) {
   });
 
   // check if email is verified before login
-  Useraccount.beforeRemote('login', function(ctx, unused, next) {
+  Useraccount.beforeRemote('login', function (ctx, unused, next) {
     let email = ctx.args.credentials.email;
     let pass = ctx.args.credentials.password;
     Useraccount.findOne(
@@ -130,7 +130,7 @@ module.exports = function(Useraccount) {
           email: email,
         },
       },
-      function(err, data) {
+      function (err, data) {
         if (err) {
           next(err);
         } else if (data !== null) {
@@ -151,7 +151,7 @@ module.exports = function(Useraccount) {
   // TODO: send user info and role
   Useraccount.afterRemote('login', (ctx, output, next) => {
     Useraccount.findOne(
-      {where: {id: output.userId}, include: ['role']},
+      { where: { id: output.userId }, include: ['role'] },
       (err, user) => {
         if (err) next(err);
         // output['user'] = user.toJSON();
@@ -177,7 +177,7 @@ module.exports = function(Useraccount) {
     phoneNumber,
     username
   ) => {
-    let {IcogRole} = Useraccount.app.models;
+    let { IcogRole } = Useraccount.app.models;
     let userRole = await IcogRole.findOne({
       where: {
         name: 'solve-it-mgt',
@@ -210,7 +210,7 @@ module.exports = function(Useraccount) {
     phoneNumber,
     username
   ) => {
-    let {IcogRole} = Useraccount.app.models;
+    let { IcogRole } = Useraccount.app.models;
     let userRole = await IcogRole.findOne({
       where: {
         name: 'solve-it-team',
@@ -236,7 +236,7 @@ module.exports = function(Useraccount) {
 
   // register SolveIT participants
   Useraccount.registerParticipants = async user => {
-    let {IcogRole} = Useraccount.app.models;
+    let { IcogRole } = Useraccount.app.models;
     let userRole = await IcogRole.findOne({
       where: {
         name: 'solve-it-participants',
@@ -264,22 +264,22 @@ module.exports = function(Useraccount) {
       {
         id: userId,
       },
-      {status: STATUS[1]}
+      { status: STATUS[1] }
     );
 
     return user;
   };
 
   // confirm email address
-  Useraccount.confirmEmail = function(userId, cid, cb) {
-    let {emailConfirmationId} = Useraccount.app.models;
+  Useraccount.confirmEmail = function (userId, cid, cb) {
+    let { emailConfirmationId } = Useraccount.app.models;
     emailConfirmationId.findOne(
       {
         where: {
           cId: cid,
         },
       },
-      function(err, record) {
+      function (err, record) {
         if (record !== null && userId === record.userId) {
           console.log('record ', record);
           Useraccount.updateAll(
@@ -289,7 +289,7 @@ module.exports = function(Useraccount) {
             {
               emailVerified: true,
             },
-            function(err, data) {
+            function (err, data) {
               if (err) {
                 console.log('error');
                 cb(err);
@@ -317,14 +317,14 @@ module.exports = function(Useraccount) {
       {
         id: userId,
       },
-      {status: STATUS[0]}
+      { status: STATUS[0] }
     );
 
     return user;
   };
 
   // request password change
-  Useraccount.requestPasswordChange = function(email, cb) {
+  Useraccount.requestPasswordChange = function (email, cb) {
     var pattern = new RegExp('.*' + email + '.*', 'i');
     Useraccount.findOne(
       {
@@ -334,19 +334,19 @@ module.exports = function(Useraccount) {
           },
         },
       },
-      function(err, data) {
+      function (err, data) {
         if (err) {
           cb(new Error('Error while searching user'));
         } else {
           if (data !== null) {
-            let {forgotPasswordRequest} = Useraccount.app.models;
+            let { forgotPasswordRequest } = Useraccount.app.models;
             const requestId = uniqueid();
             forgotPasswordRequest.create(
               {
                 id: requestId,
                 userId: data.id,
               },
-              function(err, res) {
+              function (err, res) {
                 if (err) {
                   cb(
                     new Error(
@@ -359,12 +359,12 @@ module.exports = function(Useraccount) {
                   );
                 } else {
                   //  Email
-                  let {Email} = Useraccount.app.models;
+                  let { Email } = Useraccount.app.models;
                   let email = data.email;
                   let userId = data.id;
                   let html = `<p> <b>${
                     data.firstName
-                  }</b>, You have request to change your account password. Please follow the given link.</p>
+                    }</b>, You have request to change your account password. Please follow the given link.</p>
                             <a href="${url}/change-password/${userId}-${requestId}">password change confirmation link.</a>`;
 
                   Email.send(
@@ -374,7 +374,7 @@ module.exports = function(Useraccount) {
                       subject: 'Confirmation for password change',
                       html: html,
                     },
-                    function(err, mail) {
+                    function (err, mail) {
                       if (err) {
                         console.log('Error while sending email ', err);
                         cb(new Error('Error while sending email.'), {
@@ -404,7 +404,7 @@ module.exports = function(Useraccount) {
   };
 
   // reset password
-  Useraccount.updatePassword = function(id, password, cb) {
+  Useraccount.updatePassword = function (id, password, cb) {
     const buildError = (code, error) => {
       const err = new Error(error);
       err.statusCode = 400;
@@ -418,12 +418,12 @@ module.exports = function(Useraccount) {
           id: id,
         },
       },
-      function(err, user) {
+      function (err, user) {
         if (err) {
           cb(buildError('INVALID_OPERATION', 'unable to find user.'));
           return;
         }
-        user.updateAttribute('password', password, function(err, user) {
+        user.updateAttribute('password', password, function (err, user) {
           if (err) {
             cb(buildError('INVALID_OPERATION', err));
             return;
@@ -438,14 +438,14 @@ module.exports = function(Useraccount) {
   };
 
   // chek if email is unique
-  Useraccount.isEmailUnique = function(email, cb) {
+  Useraccount.isEmailUnique = function (email, cb) {
     Useraccount.findOne(
       {
         where: {
           email: email,
         },
       },
-      function(err, user) {
+      function (err, user) {
         if (err) {
           cb(err);
           return;
@@ -462,7 +462,7 @@ module.exports = function(Useraccount) {
   };
 
   // search password
-  Useraccount.searchUser = function(keyword, userId, cb) {
+  Useraccount.searchUser = function (keyword, userId, cb) {
     let trimedKeyword = keyword.trim();
     if (
       trimedKeyword.startsWith('+2519') ||
@@ -477,7 +477,7 @@ module.exports = function(Useraccount) {
     ); /* case-insensitive RegExp search */
     if (trimedKeyword !== '') {
       Useraccount.find(
-        {where: {id: userId}, include: ['role']},
+        { where: { id: userId }, include: ['role'] },
         (error, user) => {
           if (error) cb(new Error('Error while fetching user.'));
           if (user.length > 0) {
@@ -526,22 +526,22 @@ module.exports = function(Useraccount) {
                     ],
                   },
                 },
-                function(err, users) {
+                function (err, users) {
                   cb(null, users);
                 }
               );
             } else {
-              let {IcogRole} = Useraccount.app.models;
+              let { IcogRole } = Useraccount.app.models;
               IcogRole.findOne(
                 {
                   where: {
                     or: [
-                      {name: 'solve-it-team'},
-                      {name: 'solve-it-participants'},
+                      { name: 'solve-it-team' },
+                      { name: 'solve-it-participants' },
                     ],
                   },
                 },
-                function(err, role) {
+                function (err, role) {
                   Useraccount.find(
                     {
                       where: {
@@ -586,7 +586,7 @@ module.exports = function(Useraccount) {
                         ],
                       },
                     },
-                    function(err, users) {
+                    function (err, users) {
                       cb(null, users);
                     }
                   );
@@ -602,14 +602,14 @@ module.exports = function(Useraccount) {
   };
 
   // get users by role
-  Useraccount.getUserListByRole = function(roleId, cb) {
+  Useraccount.getUserListByRole = function (roleId, cb) {
     Useraccount.find(
       {
         where: {
           roleId: roleId,
         },
       },
-      function(err, users) {
+      function (err, users) {
         cb(null, users);
       }
     );
@@ -617,7 +617,7 @@ module.exports = function(Useraccount) {
 
   Useraccount.getUserInfo = async userId => {
     const user = await Useraccount.findOne({
-      where: {id: userId},
+      where: { id: userId },
       include: ['university'],
     });
 
@@ -636,11 +636,11 @@ module.exports = function(Useraccount) {
     var workbook = new Excel.Workbook();
     var sheet = workbook.addWorksheet('report');
 
-    const {IcogRole} = Useraccount.app.models;
+    const { IcogRole } = Useraccount.app.models;
     const City = Useraccount.app.models.City;
 
     const role = await IcogRole.findOne({
-      where: {name: 'solve-it-participants'},
+      where: { name: 'solve-it-participants' },
     });
 
     var sex = selectionOptions.sex;
@@ -649,32 +649,32 @@ module.exports = function(Useraccount) {
     var users = [];
 
     if (selectionOptions.selectedCity.toString() === '0') {
-      cities = await City.find({include: 'region'});
+      cities = await City.find({ include: 'region' });
     } else {
       let city = await City.findOne({
-        where: {id: selectionOptions.selectedCity},
+        where: { id: selectionOptions.selectedCity },
         include: 'region',
       });
       cities.push(city);
     }
     sheet.columns = [
-      {header: 'Region', key: 'region', width: 10},
-      {header: 'City', key: 'city', width: 10},
-      {header: 'First Name', key: 'firstName', width: 10},
-      {header: 'Middle Name', key: 'middleName', width: 10},
-      {header: 'Last Name', key: 'lastName', width: 10},
-      {header: 'Gender', key: 'sex', width: 10},
-      {header: 'Phone Number', key: 'phoneNumber', width: 10},
-      {header: 'Education Level', key: 'educationLevel', width: 10},
-      {header: 'Work Status', key: 'workStatus', width: 10},
-      {header: 'Birthdate', key: 'birthDate', width: 10},
-      {header: 'Emergency Name', key: 'emergencyName', width: 10},
-      {header: 'Emergency Contact', key: 'emergencyContact', width: 10},
+      { header: 'Region', key: 'region', width: 10 },
+      { header: 'City', key: 'city', width: 10 },
+      { header: 'First Name', key: 'firstName', width: 10 },
+      { header: 'Middle Name', key: 'middleName', width: 10 },
+      { header: 'Last Name', key: 'lastName', width: 10 },
+      { header: 'Gender', key: 'sex', width: 10 },
+      { header: 'Phone Number', key: 'phoneNumber', width: 10 },
+      { header: 'Education Level', key: 'educationLevel', width: 10 },
+      { header: 'Work Status', key: 'workStatus', width: 10 },
+      { header: 'Birthdate', key: 'birthDate', width: 10 },
+      { header: 'Emergency Name', key: 'emergencyName', width: 10 },
+      { header: 'Emergency Contact', key: 'emergencyContact', width: 10 },
     ];
 
     if (sex == 'both' && educationLevel == 'none') {
       for (const city of cities) {
-        users = await Useraccount.find({where: {cityId: city.id}});
+        users = await Useraccount.find({ where: { cityId: city.id } });
         for (const user of users) {
           sheet.addRow({
             region: JSON.parse(JSON.stringify(city)).region.name,
@@ -696,7 +696,7 @@ module.exports = function(Useraccount) {
       if (sex == 'both') {
         for (const city of cities) {
           users = await Useraccount.find({
-            where: {cityId: city.id, educationLevel: educationLevel},
+            where: { cityId: city.id, educationLevel: educationLevel },
           });
           for (const user of users) {
             sheet.addRow({
@@ -718,7 +718,7 @@ module.exports = function(Useraccount) {
       } else {
         for (const city of cities) {
           users = await Useraccount.find({
-            where: {cityId: city.id, gender: sex},
+            where: { cityId: city.id, gender: sex },
           });
           for (const user of users) {
             sheet.addRow({
@@ -741,7 +741,7 @@ module.exports = function(Useraccount) {
     } else {
       for (const city of cities) {
         users = await Useraccount.find({
-          where: {cityId: city.id, educationLevel: educationLevel, gender: sex},
+          where: { cityId: city.id, educationLevel: educationLevel, gender: sex },
         });
         for (const user of users) {
           sheet.addRow({
@@ -781,9 +781,9 @@ module.exports = function(Useraccount) {
     response.end();
   }
 
-  Useraccount.getAssignedCities = function(id, cb) {
-    const {AssignedCity} = Useraccount.app.models;
-    AssignedCity.find({where: {userId: id}}, (error, data) => {
+  Useraccount.getAssignedCities = function (id, cb) {
+    const { AssignedCity } = Useraccount.app.models;
+    AssignedCity.find({ where: { userId: id } }, (error, data) => {
       if (error) cb(new Error('Error while fetching assigned cities'));
       cb(null, data);
     });
@@ -1118,13 +1118,13 @@ module.exports = function(Useraccount) {
     },
   });
 
-  Useraccount.signInWithFB = function(user, cb) {
-    const {AccessToken} = Useraccount.app.models;
+  Useraccount.signInWithFB = function (user, cb) {
+    const { AccessToken } = Useraccount.app.models;
     if (user.authResponse.userID && user.authResponse.userID === '') {
       return cb(new Error('Invalid user data.'));
     } else {
       Useraccount.findOne(
-        {where: {facebookId: user.authResponse.userID}},
+        { where: { facebookId: user.authResponse.userID } },
         (error, data) => {
           if (error) {
             cb(error);

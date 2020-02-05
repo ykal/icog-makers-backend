@@ -157,5 +157,9 @@
   "university": {
     "dataSource": "mongo",
     "public": true
+  },
+  "chat": {
+    "dataSource": "mongo",
+    "public": true
   }
 }
